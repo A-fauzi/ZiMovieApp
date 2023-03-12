@@ -74,14 +74,15 @@
             app:endIconDrawable="@drawable/ic_badge_check"
             app:endIconMode="none"
             app:endIconTint="@color/blue_ocean"
-            app:hintEnabled="false">
+            app:hintEnabled="false"
+            android:enabled="false">
 
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Email"
+                android:hint="Username"
                 android:inputType="textEmailAddress"
                 android:padding="16dp" />
 
@@ -102,7 +103,8 @@
             app:endIconDrawable="@drawable/ic_badge_check"
             app:endIconMode="none"
             app:endIconTint="@color/blue_ocean"
-            app:hintEnabled="false">
+            app:hintEnabled="false"
+            android:enabled="false">
 
 
             <com.google.android.material.textfield.TextInputEditText
@@ -130,7 +132,8 @@
             app:endIconDrawable="@drawable/ic_badge_check"
             app:endIconMode="none"
             app:endIconTint="@color/blue_ocean"
-            app:hintEnabled="false">
+            app:hintEnabled="false"
+            android:enabled="false">
 
 
             <com.google.android.material.textfield.TextInputEditText
@@ -160,7 +163,8 @@
             android:padding="@dimen/margin"
             android:text="Next"
             android:textAllCaps="false"
-            app:cornerRadius="@dimen/corner_radius_button" />
+            app:cornerRadius="@dimen/corner_radius_button"
+            android:enabled="false"/>
 
         <LinearLayout
             android:layout_width="match_parent"
