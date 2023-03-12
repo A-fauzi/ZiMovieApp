@@ -1,7 +1,8 @@
-package com.afauzi.zimovieapp
+package com.afauzi.zimovieapp.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.afauzi.zimovieapp.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

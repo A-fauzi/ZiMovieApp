@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">ZiMovieApp</string>
+    <string name="title_auth">Welcome to my Movie App!</string>
+    <string name="lorem">In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before final copy is available.</string>
+    <string name="lorem_1">In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content.</string>
+    <string name="create_an_account">Create an Account</string>
+    <string name="login">Sign in</string>
+    <string name="register">Sign up</string>
+    <string name="or_sign_up_with">or sign up with</string>
+    <string name="or_sign_in_with">or sign in with</string>
+    <string name="content_description">TODO</string>
+    <string name="i_already_have_an_account">I already have an account</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="i_don_t_have_an_account">I don\'t have an account</string>
 </resources>
