@@ -1,5 +1,6 @@
 package com.afauzi.zimovieapp.presentation.view
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -10,6 +11,7 @@ import com.afauzi.zimovieapp.data.remote.MovieApiProvider
 import com.afauzi.zimovieapp.data.repository.MovieRepository
 import com.afauzi.zimovieapp.databinding.ActivityMainBinding
 import com.afauzi.zimovieapp.presentation.adapter.MovieAdapterPaging
+import com.afauzi.zimovieapp.presentation.view.auth.SignInActivity
 import com.afauzi.zimovieapp.presentation.viewmodel.movie.MovieViewModel
 import com.afauzi.zimovieapp.presentation.viewmodel.movie.MovieViewModelFactory
 import com.google.firebase.auth.FirebaseAuth
@@ -28,6 +30,12 @@ class MainActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         val user = auth.currentUser
         Toast.makeText(this, user?.email, Toast.LENGTH_SHORT).show()
+
+        binding.btnSignOut.setOnClickListener {
+            auth.signOut()
+            startActivity(Intent(this, SignInActivity::class.java))
+            finish()
+        }
 
         val movieApiService = MovieApiProvider.provideMovieApiService()
         val movieRepository = MovieRepository(movieApiService)

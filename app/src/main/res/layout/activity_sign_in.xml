@@ -75,7 +75,8 @@
             app:endIconMode="none"
             app:endIconTint="@color/blue_ocean"
             app:hintEnabled="false"
-            android:layout_marginTop="16dp">
+            android:layout_marginTop="16dp"
+            android:enabled="false">
 
 
             <com.google.android.material.textfield.TextInputEditText
@@ -117,14 +118,28 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_sign_in"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cornerRadius="@dimen/corner_radius_button"
-            android:text="Sign In"
-            android:padding="@dimen/margin"
-            android:textAllCaps="false"/>
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_sign_in"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cornerRadius="@dimen/corner_radius_button"
+                android:text="Sign In"
+                android:padding="@dimen/margin"
+                android:textAllCaps="false"
+                android:enabled="false"/>
+
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:visibility="gone"/>
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

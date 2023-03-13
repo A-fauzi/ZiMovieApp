@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.Toast
@@ -72,15 +71,15 @@ class SignUpActivity : AppCompatActivity() {
         val authRepository = AuthRepository(FirebaseAuth.getInstance())
         viewModel = ViewModelProvider(this, AuthViewModelProvider(authRepository))[AuthViewModel::class.java]
 
-        viewModel.signUpResult.observe(this) { signUpResult ->
+        viewModel.authResult.observe(this) { signUpResult ->
             when(signUpResult) {
-                is AuthViewModel.SignUpResult.Success -> {
+                is AuthViewModel.AuthResult.Success -> {
                     Toast.makeText(this, signUpResult.msg, Toast.LENGTH_SHORT).show()
                     val intent = Intent(this, MainActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                     startActivity(intent)
                 }
-                is AuthViewModel.SignUpResult.Failure -> {
+                is AuthViewModel.AuthResult.Failure -> {
                     Toast.makeText(this, signUpResult.error, Toast.LENGTH_SHORT).show()
                     binding.btnNextRegister.visibility = View.VISIBLE
                     binding.progressBar.visibility = View.GONE
