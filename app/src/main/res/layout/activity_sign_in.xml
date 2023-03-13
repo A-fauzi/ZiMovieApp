@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="@dimen/padding_root"
-    tools:context=".view.auth.SignInActivity">
+    tools:context=".presentation.view.auth.SignInActivity">
 
 
     <LinearLayout

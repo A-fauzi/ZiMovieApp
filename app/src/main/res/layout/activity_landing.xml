@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/padding_root"
-    tools:context=".view.LandingActivity">
+    tools:context=".presentation.view.LandingActivity">
 
     <LinearLayout
         android:layout_width="match_parent"

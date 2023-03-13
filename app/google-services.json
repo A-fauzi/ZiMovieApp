@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1081851251940",
+    "project_id": "zimovieapp",
+    "storage_bucket": "zimovieapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1081851251940:android:7d6c14b390d60394b170f1",
+        "android_client_info": {
+          "package_name": "com.afauzi.zimovieapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1081851251940-cgunluhjqb79l50pfdiqpvuduoc97lt4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyChxyyECrYjoa7idNqD5BwwOahnWxMvFRc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1081851251940-cgunluhjqb79l50pfdiqpvuduoc97lt4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

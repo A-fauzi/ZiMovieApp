@@ -7,10 +7,11 @@
         <entry key="..\:/Users/akhma/DEVELOPMENT/ANDROID/ASSESMENT/ZiMovieApp/app/src/main/res/drawable/ic_icons8_google.xml" value="0.149" />
         <entry key="..\:/Users/akhma/DEVELOPMENT/ANDROID/ASSESMENT/ZiMovieApp/app/src/main/res/layout/activity_authentication.xml" value="0.21041666666666667" />
         <entry key="..\:/Users/akhma/DEVELOPMENT/ANDROID/ASSESMENT/ZiMovieApp/app/src/main/res/layout/activity_landing.xml" value="0.22447916666666667" />
-        <entry key="..\:/Users/akhma/DEVELOPMENT/ANDROID/ASSESMENT/ZiMovieApp/app/src/main/res/layout/activity_main.xml" value="0.18" />
+        <entry key="..\:/Users/akhma/DEVELOPMENT/ANDROID/ASSESMENT/ZiMovieApp/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/Users/akhma/DEVELOPMENT/ANDROID/ASSESMENT/ZiMovieApp/app/src/main/res/layout/activity_sign_in.xml" value="0.22447916666666667" />
         <entry key="..\:/Users/akhma/DEVELOPMENT/ANDROID/ASSESMENT/ZiMovieApp/app/src/main/res/layout/activity_sign_up.xml" value="0.21041666666666667" />
         <entry key="..\:/Users/akhma/DEVELOPMENT/ANDROID/ASSESMENT/ZiMovieApp/app/src/main/res/layout/fragment_sign_in.xml" value="0.22" />
+        <entry key="..\:/Users/akhma/DEVELOPMENT/ANDROID/ASSESMENT/ZiMovieApp/app/src/main/res/layout/item_movie.xml" value="0.22447916666666667" />
       </map>
     </option>
   </component>

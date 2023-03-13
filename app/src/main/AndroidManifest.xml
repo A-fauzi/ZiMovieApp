@@ -14,10 +14,10 @@
         android:theme="@style/Theme.ZiMovieApp"
         tools:targetApi="31">
         <activity
-            android:name=".view.auth.SignUpActivity"
+            android:name="com.afauzi.zimovieapp.presentation.view.auth.SignUpActivity"
             android:exported="false" />
         <activity
-            android:name=".view.LandingActivity"
+            android:name="com.afauzi.zimovieapp.presentation.view.LandingActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,10 +26,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".view.auth.SignInActivity"
+            android:name="com.afauzi.zimovieapp.presentation.view.auth.SignInActivity"
             android:exported="false" />
         <activity
-            android:name=".view.MainActivity"
+            android:name="com.afauzi.zimovieapp.presentation.view.MainActivity"
             android:exported="false" />
 
         <meta-data
