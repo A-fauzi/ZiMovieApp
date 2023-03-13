@@ -11,7 +11,7 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.afauzi.zimovieapp.data.repository.AuthRepository
 import com.afauzi.zimovieapp.databinding.ActivitySignUpBinding
-import com.afauzi.zimovieapp.presentation.view.MainActivity
+import com.afauzi.zimovieapp.presentation.view.main.MainActivity
 import com.afauzi.zimovieapp.presentation.viewmodel.auth.AuthViewModel
 import com.afauzi.zimovieapp.presentation.viewmodel.auth.AuthViewModelProvider
 import com.google.android.material.textfield.TextInputLayout

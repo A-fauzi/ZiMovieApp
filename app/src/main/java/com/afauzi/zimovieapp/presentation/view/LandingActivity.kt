@@ -7,6 +7,7 @@ import android.widget.Toast
 import com.afauzi.zimovieapp.databinding.ActivityLandingBinding
 import com.afauzi.zimovieapp.presentation.view.auth.SignInActivity
 import com.afauzi.zimovieapp.presentation.view.auth.SignUpActivity
+import com.afauzi.zimovieapp.presentation.view.main.MainActivity
 import com.google.firebase.auth.FirebaseAuth
 
 class LandingActivity : AppCompatActivity() {

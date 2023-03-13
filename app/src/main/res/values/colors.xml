@@ -16,5 +16,6 @@
 
 <!--  Dark Color  -->
     <color name="dark">#101332</color>
+    <color name="dark_on_primary">#6043B1</color>
 
 </resources>
