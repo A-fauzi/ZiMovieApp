@@ -21,6 +21,7 @@ import com.afauzi.zimovieapp.domain.modelentities.genre.Genre
 import com.afauzi.zimovieapp.domain.modelentities.movie.Movie
 import com.afauzi.zimovieapp.presentation.adapter.GenresAdapterMovie
 import com.afauzi.zimovieapp.presentation.adapter.MovieAdapterPaging
+import com.afauzi.zimovieapp.presentation.view.main.DetailMovieActivity
 import com.afauzi.zimovieapp.presentation.view.main.MoviesByGenreActivity
 import com.afauzi.zimovieapp.presentation.viewmodel.movie.MovieViewModel
 import com.afauzi.zimovieapp.presentation.viewmodel.movie.MovieViewModelFactory
@@ -77,7 +78,7 @@ class HomeFragment : Fragment(), MovieAdapterPaging.ListenerMoviesAdapter, Genre
     }
 
     override fun onClickItemPopularMovies(data: Movie?) {
-        Toast.makeText(requireActivity(), data?.title, Toast.LENGTH_SHORT).show()
+        startActivity(Intent(requireActivity(), DetailMovieActivity::class.java))
     }
 
     override fun onClickItemGenre(data: Genre) {

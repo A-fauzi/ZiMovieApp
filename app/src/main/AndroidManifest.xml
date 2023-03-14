@@ -14,7 +14,10 @@
         android:theme="@style/Theme.ZiMovieApp"
         tools:targetApi="31">
         <activity
-            android:name="com.afauzi.zimovieapp.presentation.view.main.MoviesByGenreActivity"
+            android:name=".presentation.view.main.DetailMovieActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.view.main.MoviesByGenreActivity"
             android:exported="false" />
         <activity
             android:name="com.afauzi.zimovieapp.presentation.view.auth.SignUpActivity"
