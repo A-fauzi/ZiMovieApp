@@ -6,4 +6,5 @@
     <dimen name="corner_radius_button">15dp</dimen>
     <dimen name="text_size_18">18sp</dimen>
     <dimen name="title_dimen_24">24sp</dimen>
+    <dimen name="padding_8">8dp</dimen>
 </resources>

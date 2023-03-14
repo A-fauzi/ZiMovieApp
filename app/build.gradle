@@ -84,4 +84,10 @@ dependencies {
     def nav_version = "2.5.3"
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+
+    // circle image
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+
+    // Switch
+    implementation 'com.github.angads25:toggle:1.1.0'
 }

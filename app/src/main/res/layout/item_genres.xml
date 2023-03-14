@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="100dp"
+    android:layout_height="100dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="8dp"
+    android:backgroundTint="@color/common_google_signin_btn_text_dark_disabled"
+    app:cardCornerRadius="@dimen/corner_radius_button"
+    app:cardElevation="0dp"
+    android:id="@+id/cv_btn_item_genre"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground">
+
+    <TextView
+        android:id="@+id/tv_item_name_genres"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="genres apa aa boleh"
+        android:textAlignment="center"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_margin="@dimen/margin"/>
+
+</androidx.cardview.widget.CardView>

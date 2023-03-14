@@ -14,8 +14,16 @@
     <color name="yellow">#FFD23A</color>
     <color name="green">#5CC080</color>
 
+    <color name="primaryColor">#3872FF</color>
+    <color name="primaryTextColor">#FF000000</color>
+    <color name="backgroundColor">#FFFFFFFF</color>
+
 <!--  Dark Color  -->
     <color name="dark">#101332</color>
     <color name="dark_on_primary">#6043B1</color>
+
+    <color name="primaryColor_dark">#101332</color>
+    <color name="primaryTextColor_dark">#FFFFFFFF</color>
+    <color name="backgroundColor_dark">#FF000000</color>
 
 </resources>

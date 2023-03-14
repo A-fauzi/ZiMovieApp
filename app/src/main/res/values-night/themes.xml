@@ -1,16 +1,16 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.ZiMovieApp" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/blue_ocean</item>
-        <item name="colorPrimaryVariant">@color/blue_ocean</item>
-        <item name="colorOnPrimary">@color/dark</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/blue_ocean</item>
-        <item name="colorSecondaryVariant">@color/blue_ocean</item>
-        <item name="colorOnSecondary">@color/white</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorOnPrimary</item>
-        <!-- Customize your theme here. -->
+    <style name="Theme.ZiMovieApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- primary color -->
+        <item name="colorPrimary">@color/dark</item>
+        <item name="colorPrimaryDark">@color/dark</item>
+
+        <!-- background color -->
+        <item name="android:windowBackground">@color/dark</item>
+
+        <!-- text color -->
+        <item name="android:textColor">@color/primaryTextColor_dark</item>
     </style>
+
+<!--  Button  -->
 </resources>

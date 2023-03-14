@@ -4,9 +4,10 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.afauzi.zimovieapp.data.remote.MovieApiProvider
 import com.afauzi.zimovieapp.data.remote.MovieApiService
-import com.afauzi.zimovieapp.domain.modelentities.Movie
+import com.afauzi.zimovieapp.domain.modelentities.movie.Movie
+import com.afauzi.zimovieapp.domain.modelentities.movie.MovieResponse
 
-class MoviePagingSource(private val movieApiService: MovieApiService): PagingSource<Int, Movie>() {
+class MoviesByGenrePagingSource(private val movieApiService: MovieApiService, private val genreId: String): PagingSource<Int, Movie>() {
     override fun getRefreshKey(state: PagingState<Int, Movie>): Int? {
         TODO("Not yet implemented")
     }
@@ -14,10 +15,14 @@ class MoviePagingSource(private val movieApiService: MovieApiService): PagingSou
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Movie> {
         try {
             val currentLoadingPageKey = params.key ?: 1
-            val response = movieApiService.getPopularMovies(
+            val response = movieApiService.getMovieByGenre(
                 apiKey = MovieApiProvider.API_KEY,
-                language = MovieApiProvider.LANGUAGE,
-                page = currentLoadingPageKey
+                language = "en-US",
+                sortBy = "popularity.desc",
+                includeAdult = false,
+                includeVideo = false,
+                genreId = genreId,
+                page = 1
             )
             val responseData = mutableListOf<Movie>()
             val data = response.body()?.results

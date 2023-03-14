@@ -126,11 +126,11 @@
                 android:id="@+id/btn_sign_in"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cornerRadius="@dimen/corner_radius_button"
-                android:text="Sign In"
+                android:enabled="false"
                 android:padding="@dimen/margin"
+                android:text="Sign In"
                 android:textAllCaps="false"
-                android:enabled="false"/>
+                app:cornerRadius="@dimen/corner_radius_button" />
 
             <ProgressBar
                 android:id="@+id/progress_bar"

@@ -9,13 +9,13 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.afauzi.zimovieapp.R
 import com.afauzi.zimovieapp.data.remote.MovieApiProvider
-import com.afauzi.zimovieapp.databinding.ItemPopularMoviesBinding
-import com.afauzi.zimovieapp.domain.modelentities.Movie
+import com.afauzi.zimovieapp.databinding.ItemMoviesBinding
+import com.afauzi.zimovieapp.domain.modelentities.movie.Movie
 import com.bumptech.glide.Glide
 
 class MovieAdapterPaging(
     private val context: Context,
-    private val onClickListenerMoviesAdapter: OnClickListenerMoviesAdapter
+    private val onClickListenerMoviesAdapter: ListenerMoviesAdapter
     ): PagingDataAdapter<Movie, MovieAdapterPaging.ViewHolder>(ProductDiffComp) {
     object ProductDiffComp : DiffUtil.ItemCallback<Movie>() {
         override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean {
@@ -28,7 +28,7 @@ class MovieAdapterPaging(
 
     }
 
-    inner class ViewHolder(val binding: ItemPopularMoviesBinding): RecyclerView.ViewHolder(binding.root)
+    inner class ViewHolder(val binding: ItemMoviesBinding): RecyclerView.ViewHolder(binding.root)
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -45,11 +45,11 @@ class MovieAdapterPaging(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = ItemPopularMoviesBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = ItemMoviesBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 
-    interface OnClickListenerMoviesAdapter {
+    interface ListenerMoviesAdapter {
         fun onClickItemPopularMovies(data: Movie?)
     }
 }

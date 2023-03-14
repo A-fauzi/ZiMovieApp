@@ -1,4 +1,4 @@
-package com.afauzi.zimovieapp.domain.modelentities
+package com.afauzi.zimovieapp.domain.modelentities.movie
 
 data class MovieResponse(
     val page: Int,
