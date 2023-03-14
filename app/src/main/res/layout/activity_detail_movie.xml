@@ -25,6 +25,7 @@
             android:id="@+id/collapsing_toolbar">
 
             <ImageView
+                android:id="@+id/iv_backdrop_collapse"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
@@ -62,10 +63,12 @@
                 app:layout_constraintTop_toTopOf="parent"/>
 
             <TextView
+                android:id="@+id/tv_overView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/lorem100"
-                app:layout_constraintTop_toBottomOf="@id/image"/>
+                app:layout_constraintTop_toBottomOf="@id/image"
+                android:layout_marginTop="@dimen/margin"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
@@ -74,12 +77,11 @@
         android:layout_height="wrap_content"
         android:baselineAlignBottom="false"
         android:clickable="true"
-        android:src="@drawable/ic_star"
         app:fabSize="normal"
+        app:srcCompat="@drawable/ic_star_outline"
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="end|bottom"
         android:layout_marginEnd="@dimen/margin"
-        android:backgroundTint="@color/blue_ocean"
-        android:tint="@color/white"/>
+        android:focusable="true" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

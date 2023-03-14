@@ -1,5 +1,6 @@
 package com.afauzi.zimovieapp.presentation.view.main
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.GridLayout
@@ -52,6 +53,13 @@ class MoviesByGenreActivity : AppCompatActivity(), MovieAdapterPaging.ListenerMo
     }
 
     override fun onClickItemPopularMovies(data: Movie?) {
-        Toast.makeText(this, data?.title, Toast.LENGTH_SHORT).show()
+        val bundle = Bundle()
+        bundle.putString("backDrop", data?.backdropPath)
+        bundle.putString("title", data?.originalTitle)
+        bundle.putString("overview", data?.overview)
+
+        val intent = Intent(this, DetailMovieActivity::class.java)
+        intent.putExtras(bundle)
+        startActivity(intent)
     }
 }

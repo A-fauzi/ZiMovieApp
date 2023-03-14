@@ -78,7 +78,14 @@ class HomeFragment : Fragment(), MovieAdapterPaging.ListenerMoviesAdapter, Genre
     }
 
     override fun onClickItemPopularMovies(data: Movie?) {
-        startActivity(Intent(requireActivity(), DetailMovieActivity::class.java))
+        val bundle = Bundle()
+        bundle.putString("backDrop", data?.backdropPath)
+        bundle.putString("title", data?.originalTitle)
+        bundle.putString("overview", data?.overview)
+
+        val intent = Intent(requireActivity(), DetailMovieActivity::class.java)
+        intent.putExtras(bundle)
+        startActivity(intent)
     }
 
     override fun onClickItemGenre(data: Genre) {

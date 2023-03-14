@@ -9,7 +9,7 @@ import kotlinx.parcelize.Parcelize
 data class Movie(
 
 	@field:SerializedName("overview")
-	val overview: String? = null,
+    var overview: String? = null,
 
 	@field:SerializedName("original_language")
 	val originalLanguage: String? = null,
