@@ -35,7 +35,8 @@ class MovieAdapterPaging(
         with(holder) {
             with(getItem(position)) {
                 binding.tvItemTitle.text = this?.originalTitle
-                binding.tvItemReleaseDate.text = this?.releaseDate
+                binding.tvItemReleaseDate.text = "Release date: \n${this?.releaseDate}"
+                binding.tvItemVoteAverage.text = this?.voteAverage.toString()
                 binding.cvBtnItem.setOnClickListener {
                     onClickListenerMoviesAdapter.onClickItemPopularMovies(getItem(position))
                 }

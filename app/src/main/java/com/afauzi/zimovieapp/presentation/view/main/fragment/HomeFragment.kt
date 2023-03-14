@@ -3,7 +3,6 @@ package com.afauzi.zimovieapp.presentation.view.main.fragment
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,9 +11,10 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.paging.map
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.afauzi.zimovieapp.data.remote.MovieApiProvider
+import com.afauzi.zimovieapp.data.remote.MovieApiService
 import com.afauzi.zimovieapp.data.repository.MovieRepository
 import com.afauzi.zimovieapp.databinding.FragmentHomeBinding
 import com.afauzi.zimovieapp.domain.modelentities.genre.Genre
@@ -25,7 +25,7 @@ import com.afauzi.zimovieapp.presentation.view.main.MoviesByGenreActivity
 import com.afauzi.zimovieapp.presentation.viewmodel.movie.MovieViewModel
 import com.afauzi.zimovieapp.presentation.viewmodel.movie.MovieViewModelFactory
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.flow.map
+import io.paperdb.Paper
 import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment(), MovieAdapterPaging.ListenerMoviesAdapter, GenresAdapterMovie.ListenerAdapterGenre {
@@ -35,6 +35,9 @@ class HomeFragment : Fragment(), MovieAdapterPaging.ListenerMoviesAdapter, Genre
     private lateinit var movieAdapterPaging: MovieAdapterPaging
     private lateinit var genresAdapterMovie: GenresAdapterMovie
     private lateinit var auth: FirebaseAuth
+    private lateinit var movieApiService: MovieApiService
+    private lateinit var movieRepository: MovieRepository
+    private lateinit var movieViewModelFactory: MovieViewModelFactory
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,63 +45,34 @@ class HomeFragment : Fragment(), MovieAdapterPaging.ListenerMoviesAdapter, Genre
     ): View {
         // Inflate the layout for this fragment
         binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
-
-        auth = FirebaseAuth.getInstance()
-        val user = auth.currentUser
-        user?.let {
-            binding.tvUsername.text = it.email
-        }
-
-
-        when (requireActivity().resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
-            Configuration.UI_MODE_NIGHT_YES -> {
-                binding.switchToogle.isOn = true
-            }
-            Configuration.UI_MODE_NIGHT_NO -> {
-                binding.switchToogle.isOn = false
-            }
-        }
-        binding.switchToogle.setOnToggledListener { toggleableView, isOn ->
-            if (isOn) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            } else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            }
-        }
-
+        initView()
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val movieApiService = MovieApiProvider.provideMovieApiService()
-        val movieRepository = MovieRepository(movieApiService)
-        val viewModelFactory = MovieViewModelFactory(movieRepository, movieApiService)
-        viewModel = ViewModelProvider(this, viewModelFactory)[MovieViewModel::class.java]
+        currentUser()
+        checkThemeState()
+        checkStateThemeIfDarkMode()
+        switchToggleThemeAction()
 
-        movieAdapterPaging = MovieAdapterPaging(requireActivity(), this )
-        binding.rvMovies.apply {
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = movieAdapterPaging
-        }
+        setUpRecyclerView(binding.rvMovies, LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false), movieAdapterPaging)
+        setUpRecyclerView(binding.rvGenres, LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false), genresAdapterMovie)
 
-        genresAdapterMovie = GenresAdapterMovie(requireActivity(), arrayListOf(), this)
-        binding.rvGenres.apply {
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = genresAdapterMovie
-        }
+        setUpViewModel()
+    }
 
+    private fun setUpViewModel() {
         lifecycleScope.launch {
             viewModel.listDataMovie.collect {
                 movieAdapterPaging.submitData(it)
             }
         }
 
-        viewModel.genres.observe(requireActivity()){
+        viewModel.genres.observe(requireActivity()) {
             genresAdapterMovie.setData(it)
         }
-
         viewModel.getGenres()
     }
 
@@ -114,4 +88,65 @@ class HomeFragment : Fragment(), MovieAdapterPaging.ListenerMoviesAdapter, Genre
         intent.putExtras(bundle)
         startActivity(intent)
     }
+
+    private fun checkStateThemeIfDarkMode() {
+        when (requireActivity().resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
+            Configuration.UI_MODE_NIGHT_YES -> {
+                binding.switchToogle.isOn = true
+            }
+            Configuration.UI_MODE_NIGHT_NO -> {
+                binding.switchToogle.isOn = false
+            }
+        }
+    }
+
+    private fun currentUser() {
+        val user = auth.currentUser
+        user?.let {
+            binding.tvUsername.text = it.email
+        }
+    }
+
+    private fun checkThemeState() {
+        when (Paper.book().read<String>("darkTheme").toString()) {
+            "true" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            "false" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            else -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
+    }
+
+    private fun switchToggleThemeAction() {
+        binding.switchToogle.setOnToggledListener { toggleableView, isOn ->
+            if (isOn) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                Paper.book().write("darkTheme", isOn)
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                Paper.book().write("darkTheme", isOn)
+            }
+        }
+    }
+
+    private fun setUpRecyclerView(recyclerView: RecyclerView, mLayoutManager: LinearLayoutManager, mAdapter: RecyclerView.Adapter<*>){
+        recyclerView.apply {
+            layoutManager = mLayoutManager
+            adapter = mAdapter
+        }
+    }
+
+    private fun initView() {
+        Paper.init(requireActivity())
+
+        auth = FirebaseAuth.getInstance()
+
+        movieApiService = MovieApiProvider.provideMovieApiService()
+        movieRepository = MovieRepository(movieApiService)
+        movieViewModelFactory = MovieViewModelFactory(movieRepository, movieApiService)
+
+        viewModel = ViewModelProvider(this, movieViewModelFactory)[MovieViewModel::class.java]
+
+        movieAdapterPaging = MovieAdapterPaging(requireActivity(), this )
+        genresAdapterMovie = GenresAdapterMovie(requireActivity(), arrayListOf(), this)
+    }
+
 }
