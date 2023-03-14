@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -82,9 +81,11 @@ class HomeFragment : Fragment(), MovieAdapterPaging.ListenerMoviesAdapter, Genre
         bundle.putString("backDrop", data?.backdropPath)
         bundle.putString("title", data?.originalTitle)
         bundle.putString("overview", data?.overview)
+        bundle.putString("voteAverage", data?.voteAverage.toString())
 
         val intent = Intent(requireActivity(), DetailMovieActivity::class.java)
         intent.putExtras(bundle)
+        intent.putIntegerArrayListExtra("genresId", data?.genreIds as ArrayList<Int?>?)
         startActivity(intent)
     }
 

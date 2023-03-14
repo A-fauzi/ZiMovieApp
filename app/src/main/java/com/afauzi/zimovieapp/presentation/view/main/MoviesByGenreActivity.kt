@@ -57,9 +57,12 @@ class MoviesByGenreActivity : AppCompatActivity(), MovieAdapterPaging.ListenerMo
         bundle.putString("backDrop", data?.backdropPath)
         bundle.putString("title", data?.originalTitle)
         bundle.putString("overview", data?.overview)
+        bundle.putString("overview", data?.overview)
+        bundle.putString("voteAverage", data?.voteAverage.toString())
 
         val intent = Intent(this, DetailMovieActivity::class.java)
         intent.putExtras(bundle)
+        intent.putIntegerArrayListExtra("genresId", data?.genreIds as ArrayList<Int?>?)
         startActivity(intent)
     }
 }
