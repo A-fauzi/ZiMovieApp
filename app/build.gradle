@@ -16,7 +16,6 @@ android {
         targetSdk 32
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -93,4 +92,7 @@ dependencies {
 
     // Preference
     implementation 'io.github.pilgr:paperdb:2.7.2'
+
+    // Youtube
+    implementation files('libs/YouTubeAndroidPlayerApi.jar')
 }

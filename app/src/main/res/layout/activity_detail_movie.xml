@@ -38,24 +38,24 @@
                     app:layout_collapseMode="parallax"/>
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/cv_btn_play_video"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
                     android:backgroundTint="#80000000"
-                    app:cardElevation="0dp"
-                    android:layout_centerVertical="true"
-                    android:layout_centerHorizontal="true"
-                    app:cardCornerRadius="25dp"
                     android:clickable="true"
                     android:focusable="true"
-                    android:foreground="?attr/selectableItemBackground">
+                    android:foreground="?attr/selectableItemBackground"
+                    app:cardCornerRadius="25dp"
+                    app:cardElevation="0dp">
 
                     <ImageView
                         android:layout_width="50dp"
                         android:layout_height="50dp"
+                        android:layout_margin="@dimen/margin"
                         android:src="@drawable/ic_play"
                         app:layout_collapseMode="parallax"
-                        app:tint="@color/white"
-                        android:layout_margin="@dimen/margin"/>
+                        app:tint="@color/white" />
                 </androidx.cardview.widget.CardView>
             </RelativeLayout>
 
@@ -79,7 +79,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="@dimen/padding_root">
-
 
             <LinearLayout
                 android:layout_width="match_parent"

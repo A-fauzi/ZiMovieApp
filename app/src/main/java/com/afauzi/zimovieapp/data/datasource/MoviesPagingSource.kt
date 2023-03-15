@@ -5,7 +5,6 @@ import androidx.paging.PagingState
 import com.afauzi.zimovieapp.data.remote.MovieApiProvider
 import com.afauzi.zimovieapp.data.remote.MovieApiService
 import com.afauzi.zimovieapp.domain.modelentities.movie.Movie
-import com.afauzi.zimovieapp.domain.modelentities.movie.MovieResponse
 
 class MoviesPagingSource(private val movieApiService: MovieApiService): PagingSource<Int, Movie>() {
     override fun getRefreshKey(state: PagingState<Int, Movie>): Int? {
@@ -16,7 +15,7 @@ class MoviesPagingSource(private val movieApiService: MovieApiService): PagingSo
         try {
             val currentLoadingPageKey = params.key ?: 1
             val response = movieApiService.getPopularMovies(
-                apiKey = MovieApiProvider.API_KEY,
+                apiKey = MovieApiProvider.MOVIE_API_KEY,
                 language = MovieApiProvider.LANGUAGE,
                 page = currentLoadingPageKey
             )

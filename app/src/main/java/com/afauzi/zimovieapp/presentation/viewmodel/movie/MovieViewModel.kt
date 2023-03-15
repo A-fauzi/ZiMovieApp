@@ -15,23 +15,11 @@ import com.afauzi.zimovieapp.data.remote.MovieApiService
 import com.afauzi.zimovieapp.data.repository.MovieRepository
 import com.afauzi.zimovieapp.domain.modelentities.genre.Genre
 import com.afauzi.zimovieapp.domain.modelentities.movie.Movie
+import com.afauzi.zimovieapp.domain.modelentities.video.VideoResultsItem
 import kotlinx.coroutines.launch
 import java.util.concurrent.Flow
 
 class MovieViewModel(private val movieRepository: MovieRepository, private val movieApiService: MovieApiService): ViewModel() {
-//    private val _movies = MutableLiveData<List<Movie>>()
-//    val movies: LiveData<List<Movie>>
-//        get() = _movies
-//
-//     fun getMovies() {
-//        viewModelScope.launch {
-//            try {
-//                _movies.value = movieRepository.getPopularMovies()
-//            }catch (e: Exception) {
-//                Log.e(TAG, "Error retrieving popular movies", e)
-//            }
-//        }
-//    }
 
 
     private val _genres = MutableLiveData<List<Genre>>()
@@ -44,6 +32,20 @@ class MovieViewModel(private val movieRepository: MovieRepository, private val m
                 _genres.value = movieRepository.getGenreMovies()
             }catch (e: Exception) {
                 Log.e(TAG, "Error retrieving popular movies", e)
+            }
+        }
+    }
+
+    private val _movieVideos = MutableLiveData<List<VideoResultsItem?>>()
+    val movieVideos: LiveData<List<VideoResultsItem?>>
+        get() = _movieVideos
+
+    fun getMovieVideos(movieId: Int) {
+        viewModelScope.launch {
+            try {
+                _movieVideos.value = movieRepository.getMovieVideos(movieId)
+            }catch (e: Exception){
+                Log.e(TAG, "Error retrieving movie videos", e)
             }
         }
     }

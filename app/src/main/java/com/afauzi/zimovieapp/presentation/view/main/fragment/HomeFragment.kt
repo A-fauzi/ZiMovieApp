@@ -78,6 +78,7 @@ class HomeFragment : Fragment(), MovieAdapterPaging.ListenerMoviesAdapter, Genre
 
     override fun onClickItemPopularMovies(data: Movie?) {
         val bundle = Bundle()
+        bundle.putString("movieId", data?.id.toString())
         bundle.putString("backDrop", data?.backdropPath)
         bundle.putString("title", data?.originalTitle)
         bundle.putString("overview", data?.overview)

@@ -2,9 +2,11 @@ package com.afauzi.zimovieapp.presentation.view.main
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.afauzi.zimovieapp.R
 import com.afauzi.zimovieapp.data.remote.MovieApiProvider
@@ -16,6 +18,7 @@ import com.afauzi.zimovieapp.presentation.adapter.GenresAdapterMovie2
 import com.afauzi.zimovieapp.presentation.viewmodel.movie.MovieViewModel
 import com.afauzi.zimovieapp.presentation.viewmodel.movie.MovieViewModelFactory
 import com.bumptech.glide.Glide
+import kotlinx.coroutines.launch
 
 class DetailMovieActivity : AppCompatActivity(), GenresAdapterMovie2.ListenerAdapterGenre {
     private lateinit var binding: ActivityDetailMovieBinding
@@ -29,13 +32,26 @@ class DetailMovieActivity : AppCompatActivity(), GenresAdapterMovie2.ListenerAda
         super.onCreate(savedInstanceState)
         binding = ActivityDetailMovieBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        initView()
 
         val bundleExtras = intent.extras
+        val movieId = bundleExtras?.getString("movieId")
         val backdrop = bundleExtras?.getString("backDrop")
         val title = bundleExtras?.getString("title")
         val overview = bundleExtras?.getString("overview")
         val voteAverage = bundleExtras?.getString("voteAverage")
         val genresId = intent.getIntegerArrayListExtra("genresId")
+
+
+        binding.cvBtnPlayVideo.setOnClickListener {
+            if (movieId != null) {
+                setUpViewModel(movieId.toInt()){ key ->
+                    val intent = Intent(this, VideoPlayerActivity::class.java)
+                    intent.putExtra("movieKey", key)
+                    startActivity(intent)
+                }
+            }
+        }
 
         binding.tvItemVoteAverage.text = voteAverage
         binding.collapsingToolbar.title = title
@@ -83,5 +99,21 @@ class DetailMovieActivity : AppCompatActivity(), GenresAdapterMovie2.ListenerAda
         intent.putExtras(bundle)
         startActivity(intent)
 
+    }
+
+    private fun initView() {
+
+        movieApiService = MovieApiProvider.provideMovieApiService()
+        movieRepository = MovieRepository(movieApiService)
+        movieViewModelFactory = MovieViewModelFactory(movieRepository, movieApiService)
+
+        movieViewModel = ViewModelProvider(this, movieViewModelFactory)[MovieViewModel::class.java]
+    }
+
+    private fun setUpViewModel(movieId: Int, getResult: (key: String) -> Unit) {
+        movieViewModel.movieVideos.observe(this) {
+            getResult(it.random()?.key.toString())
+        }
+        movieViewModel.getMovieVideos(movieId)
     }
 }
