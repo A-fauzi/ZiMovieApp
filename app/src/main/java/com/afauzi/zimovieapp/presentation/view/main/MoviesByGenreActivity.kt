@@ -3,25 +3,21 @@ package com.afauzi.zimovieapp.presentation.view.main
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.GridLayout
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.afauzi.zimovieapp.R
 import com.afauzi.zimovieapp.data.remote.MovieApiProvider
 import com.afauzi.zimovieapp.data.repository.MovieRepository
 import com.afauzi.zimovieapp.databinding.ActivityMoviesByGenreBinding
 import com.afauzi.zimovieapp.domain.modelentities.movie.Movie
-import com.afauzi.zimovieapp.presentation.adapter.MovieAdapterPaging
+import com.afauzi.zimovieapp.presentation.adapter.AdapterMoviePaging
 import com.afauzi.zimovieapp.presentation.viewmodel.movie.MovieViewModel
 import com.afauzi.zimovieapp.presentation.viewmodel.movie.MovieViewModelFactory
 import kotlinx.coroutines.launch
 
-class MoviesByGenreActivity : AppCompatActivity(), MovieAdapterPaging.ListenerMoviesAdapter {
+class MoviesByGenreActivity : AppCompatActivity(), AdapterMoviePaging.ListenerMoviesAdapter {
     private lateinit var binding: ActivityMoviesByGenreBinding
-    private lateinit var moviePagingAdapter: MovieAdapterPaging
+    private lateinit var moviePagingAdapter: AdapterMoviePaging
     private lateinit var movieViewModel: MovieViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +30,7 @@ class MoviesByGenreActivity : AppCompatActivity(), MovieAdapterPaging.ListenerMo
         val viewModelFactory = MovieViewModelFactory(movieRepository, movieApiService)
         movieViewModel = ViewModelProvider(this, viewModelFactory)[MovieViewModel::class.java]
 
-        moviePagingAdapter = MovieAdapterPaging(this, this )
+        moviePagingAdapter = AdapterMoviePaging(this, this )
         binding.rvMovies.apply {
             layoutManager = GridLayoutManager(context, 2)
             adapter = moviePagingAdapter

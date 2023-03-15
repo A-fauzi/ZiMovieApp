@@ -9,6 +9,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.afauzi.zimovieapp.data.datasource.MovieReviewsPagingSource
 import com.afauzi.zimovieapp.data.datasource.MoviesByGenrePagingSource
 import com.afauzi.zimovieapp.data.datasource.MoviesPagingSource
 import com.afauzi.zimovieapp.data.remote.MovieApiService
@@ -58,6 +59,9 @@ class MovieViewModel(private val movieRepository: MovieRepository, private val m
         MoviesByGenrePagingSource(movieApiService, genreId)
     }.flow.cachedIn(viewModelScope)
 
+    fun listMovieReviews(movieId: Int) = Pager(PagingConfig(pageSize = 10)) {
+        MovieReviewsPagingSource(movieApiService, movieId)
+    }.flow.cachedIn(viewModelScope)
 
 
     companion object {

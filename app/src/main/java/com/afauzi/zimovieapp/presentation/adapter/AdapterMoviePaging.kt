@@ -13,10 +13,10 @@ import com.afauzi.zimovieapp.databinding.ItemMoviesBinding
 import com.afauzi.zimovieapp.domain.modelentities.movie.Movie
 import com.bumptech.glide.Glide
 
-class MovieAdapterPaging(
+class AdapterMoviePaging(
     private val context: Context,
     private val onClickListenerMoviesAdapter: ListenerMoviesAdapter
-    ): PagingDataAdapter<Movie, MovieAdapterPaging.ViewHolder>(ProductDiffComp) {
+    ): PagingDataAdapter<Movie, AdapterMoviePaging.ViewHolder>(ProductDiffComp) {
     object ProductDiffComp : DiffUtil.ItemCallback<Movie>() {
         override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean {
             return oldItem.id == newItem.id

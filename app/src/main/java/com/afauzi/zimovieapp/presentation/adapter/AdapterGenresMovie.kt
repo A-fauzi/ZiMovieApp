@@ -8,11 +8,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.afauzi.zimovieapp.databinding.ItemGenresBinding
 import com.afauzi.zimovieapp.domain.modelentities.genre.Genre
 
-class GenresAdapterMovie(
+class AdapterGenresMovie(
     private val context: Context,
     private val items: ArrayList<Genre>,
     private val onClickListenerAdapterGenres: ListenerAdapterGenre
-): RecyclerView.Adapter<GenresAdapterMovie.ViewHolder>() {
+): RecyclerView.Adapter<AdapterGenresMovie.ViewHolder>() {
     class ViewHolder(val binding: ItemGenresBinding): RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

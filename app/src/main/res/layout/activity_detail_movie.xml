@@ -134,8 +134,31 @@
                         android:id="@+id/tv_overView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/lorem100"
+                        android:text="@string/lorem"
                         android:layout_marginTop="@dimen/margin_8"/>
+                    <com.google.android.material.divider.MaterialDivider
+                        android:layout_width="match_parent"
+                        android:layout_height="5dp"
+                        android:layout_marginTop="@dimen/margin"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Reviews:"
+                            android:fontFamily="@font/inter_bold"
+                            android:layout_marginTop="@dimen/margin"/>
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rv_movie_reviews"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            tools:listitem="@layout/items_movie_reviews"
+                            android:layout_marginTop="@dimen/margin"/>
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>

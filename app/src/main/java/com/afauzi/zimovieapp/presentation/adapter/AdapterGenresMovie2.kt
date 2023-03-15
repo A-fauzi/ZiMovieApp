@@ -1,18 +1,16 @@
 package com.afauzi.zimovieapp.presentation.adapter
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.afauzi.zimovieapp.databinding.ItemGenre2Binding
-import com.afauzi.zimovieapp.databinding.ItemGenresBinding
 import com.afauzi.zimovieapp.domain.modelentities.genre.Genre
 
-class GenresAdapterMovie2(
+class AdapterGenresMovie2(
     private val items: ArrayList<Genre>,
     private val onClickListenerAdapterGenres: ListenerAdapterGenre
-): RecyclerView.Adapter<GenresAdapterMovie2.ViewHolder>() {
+): RecyclerView.Adapter<AdapterGenresMovie2.ViewHolder>() {
     class ViewHolder(val binding: ItemGenre2Binding): RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

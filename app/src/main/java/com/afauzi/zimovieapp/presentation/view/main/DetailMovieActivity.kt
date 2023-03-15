@@ -2,7 +2,6 @@ package com.afauzi.zimovieapp.presentation.view.main
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -14,20 +13,22 @@ import com.afauzi.zimovieapp.data.remote.MovieApiService
 import com.afauzi.zimovieapp.data.repository.MovieRepository
 import com.afauzi.zimovieapp.databinding.ActivityDetailMovieBinding
 import com.afauzi.zimovieapp.domain.modelentities.genre.Genre
-import com.afauzi.zimovieapp.presentation.adapter.GenresAdapterMovie2
+import com.afauzi.zimovieapp.presentation.adapter.AdapterGenresMovie2
+import com.afauzi.zimovieapp.presentation.adapter.AdapterMovieReviewsPaging
 import com.afauzi.zimovieapp.presentation.viewmodel.movie.MovieViewModel
 import com.afauzi.zimovieapp.presentation.viewmodel.movie.MovieViewModelFactory
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.launch
 
-class DetailMovieActivity : AppCompatActivity(), GenresAdapterMovie2.ListenerAdapterGenre {
+class DetailMovieActivity : AppCompatActivity(), AdapterGenresMovie2.ListenerAdapterGenre {
     private lateinit var binding: ActivityDetailMovieBinding
 
     private lateinit var movieViewModel: MovieViewModel
     private lateinit var movieApiService: MovieApiService
     private lateinit var movieRepository: MovieRepository
     private lateinit var movieViewModelFactory: MovieViewModelFactory
-    private lateinit var genresAdapterMovie2: GenresAdapterMovie2
+    private lateinit var genresAdapterMovie2: AdapterGenresMovie2
+    private lateinit var movieReviewsAdapterPaging: AdapterMovieReviewsPaging
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailMovieBinding.inflate(layoutInflater)
@@ -40,7 +41,6 @@ class DetailMovieActivity : AppCompatActivity(), GenresAdapterMovie2.ListenerAda
         val title = bundleExtras?.getString("title")
         val overview = bundleExtras?.getString("overview")
         val voteAverage = bundleExtras?.getString("voteAverage")
-        val genresId = intent.getIntegerArrayListExtra("genresId")
 
 
         binding.cvBtnPlayVideo.setOnClickListener {
@@ -65,7 +65,7 @@ class DetailMovieActivity : AppCompatActivity(), GenresAdapterMovie2.ListenerAda
             binding.fabFavCollapsing.setImageResource(R.drawable.ic_star)
         }
 
-        genresAdapterMovie2 = GenresAdapterMovie2(arrayListOf(), this)
+        genresAdapterMovie2 = AdapterGenresMovie2(arrayListOf(), this)
 
         binding.rvGenres.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
@@ -77,6 +77,14 @@ class DetailMovieActivity : AppCompatActivity(), GenresAdapterMovie2.ListenerAda
         movieViewModelFactory = MovieViewModelFactory(movieRepository, movieApiService)
 
         movieViewModel = ViewModelProvider(this, movieViewModelFactory)[MovieViewModel::class.java]
+
+        movieReviewsAdapterPaging = AdapterMovieReviewsPaging()
+        binding.rvMovieReviews.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = movieReviewsAdapterPaging
+        }
+
+        val genresId = intent.getIntegerArrayListExtra("genresId")
         movieViewModel.genres.observe(this) { genreList ->
             val genres = genresId?.mapNotNull { getGenresNameById(it, genreList) }
             if (genres != null) {
@@ -84,6 +92,14 @@ class DetailMovieActivity : AppCompatActivity(), GenresAdapterMovie2.ListenerAda
             }
         }
         movieViewModel.getGenres()
+
+        lifecycleScope.launch {
+            if (movieId != null) {
+                movieViewModel.listMovieReviews(movieId.toInt()).collect {
+                    movieReviewsAdapterPaging.submitData(it)
+                }
+            }
+        }
 
     }
 

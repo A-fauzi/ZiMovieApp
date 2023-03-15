@@ -3,6 +3,7 @@ package com.afauzi.zimovieapp.data.repository
 import com.afauzi.zimovieapp.data.remote.MovieApiProvider
 import com.afauzi.zimovieapp.data.remote.MovieApiService
 import com.afauzi.zimovieapp.domain.modelentities.genre.Genre
+import com.afauzi.zimovieapp.domain.modelentities.moviereviews.MovieReview
 import com.afauzi.zimovieapp.domain.modelentities.video.VideoResultsItem
 
 class MovieRepository(private val movieApiService: MovieApiService) {

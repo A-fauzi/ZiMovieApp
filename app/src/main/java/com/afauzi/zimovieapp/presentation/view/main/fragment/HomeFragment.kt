@@ -18,8 +18,8 @@ import com.afauzi.zimovieapp.data.repository.MovieRepository
 import com.afauzi.zimovieapp.databinding.FragmentHomeBinding
 import com.afauzi.zimovieapp.domain.modelentities.genre.Genre
 import com.afauzi.zimovieapp.domain.modelentities.movie.Movie
-import com.afauzi.zimovieapp.presentation.adapter.GenresAdapterMovie
-import com.afauzi.zimovieapp.presentation.adapter.MovieAdapterPaging
+import com.afauzi.zimovieapp.presentation.adapter.AdapterGenresMovie
+import com.afauzi.zimovieapp.presentation.adapter.AdapterMoviePaging
 import com.afauzi.zimovieapp.presentation.view.main.DetailMovieActivity
 import com.afauzi.zimovieapp.presentation.view.main.MoviesByGenreActivity
 import com.afauzi.zimovieapp.presentation.viewmodel.movie.MovieViewModel
@@ -28,12 +28,12 @@ import com.google.firebase.auth.FirebaseAuth
 import io.paperdb.Paper
 import kotlinx.coroutines.launch
 
-class HomeFragment : Fragment(), MovieAdapterPaging.ListenerMoviesAdapter, GenresAdapterMovie.ListenerAdapterGenre {
+class HomeFragment : Fragment(), AdapterMoviePaging.ListenerMoviesAdapter, AdapterGenresMovie.ListenerAdapterGenre {
 
     private lateinit var binding: FragmentHomeBinding
     private lateinit var viewModel: MovieViewModel
-    private lateinit var movieAdapterPaging: MovieAdapterPaging
-    private lateinit var genresAdapterMovie: GenresAdapterMovie
+    private lateinit var movieAdapterPaging: AdapterMoviePaging
+    private lateinit var genresAdapterMovie: AdapterGenresMovie
     private lateinit var auth: FirebaseAuth
     private lateinit var movieApiService: MovieApiService
     private lateinit var movieRepository: MovieRepository
@@ -155,8 +155,8 @@ class HomeFragment : Fragment(), MovieAdapterPaging.ListenerMoviesAdapter, Genre
 
         viewModel = ViewModelProvider(this, movieViewModelFactory)[MovieViewModel::class.java]
 
-        movieAdapterPaging = MovieAdapterPaging(requireActivity(), this )
-        genresAdapterMovie = GenresAdapterMovie(requireActivity(), arrayListOf(), this)
+        movieAdapterPaging = AdapterMoviePaging(requireActivity(), this )
+        genresAdapterMovie = AdapterGenresMovie(requireActivity(), arrayListOf(), this)
     }
 
 }
