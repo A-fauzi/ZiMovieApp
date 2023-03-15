@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.afauzi.zimovieapp.databinding.ItemsMovieReviewsBinding
 import com.afauzi.zimovieapp.domain.modelentities.moviereviews.MovieReview
+import java.text.SimpleDateFormat
+import java.util.*
 
 class AdapterMovieReviewsPaging: PagingDataAdapter<MovieReview, AdapterMovieReviewsPaging.ViewHolder>(MovieReviewDiffComp) {
     class ViewHolder(val binding: ItemsMovieReviewsBinding): RecyclerView.ViewHolder(binding.root)
@@ -26,8 +28,12 @@ class AdapterMovieReviewsPaging: PagingDataAdapter<MovieReview, AdapterMovieRevi
         with(holder) {
             with(getItem(position)) {
                 binding.tvItemUserAuthor.text = this?.author
-                if (this?.updatedAt != null || this?.updatedAt != "") binding.tvItemUserDatePost.text = this?.updatedAt
-                if (this?.updatedAt?.isEmpty() == true)  binding.tvItemUserDatePost.text = this.createdAt
+
+                val updateAtConvert = this?.updatedAt?.let { dateConverter(it) }
+                val createAtConvert = this?.createdAt?.let { dateConverter(it) }
+
+                if (this?.updatedAt != null || this?.updatedAt != "") binding.tvItemUserDatePost.text = updateAtConvert
+                if (this?.updatedAt?.isEmpty() == true)  binding.tvItemUserDatePost.text = createAtConvert
                 binding.tvItemContent.text = this?.content
             }
         }
@@ -36,5 +42,16 @@ class AdapterMovieReviewsPaging: PagingDataAdapter<MovieReview, AdapterMovieRevi
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemsMovieReviewsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
+    }
+
+    private fun dateConverter(inputFormat: String): String? {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+        dateFormat.timeZone = TimeZone.getTimeZone("UTC")
+        val date = dateFormat.parse(inputFormat)
+
+        val outputFormat = SimpleDateFormat("dd MMMM yyyy HH:mm:ss", Locale.getDefault())
+        outputFormat.timeZone = TimeZone.getDefault()
+
+        return date?.let { outputFormat.format(it) }
     }
 }
