@@ -20,6 +20,7 @@ import com.afauzi.zimovieapp.domain.modelentities.genre.Genre
 import com.afauzi.zimovieapp.domain.modelentities.movie.Movie
 import com.afauzi.zimovieapp.presentation.adapter.AdapterGenresMovie
 import com.afauzi.zimovieapp.presentation.adapter.AdapterMoviePaging
+import com.afauzi.zimovieapp.presentation.adapter.stateadapter.StateLoadAdapterMoviePaging
 import com.afauzi.zimovieapp.presentation.view.main.DetailMovieActivity
 import com.afauzi.zimovieapp.presentation.view.main.MoviesByGenreActivity
 import com.afauzi.zimovieapp.presentation.viewmodel.movie.MovieViewModel
@@ -57,8 +58,8 @@ class HomeFragment : Fragment(), AdapterMoviePaging.ListenerMoviesAdapter, Adapt
         checkStateThemeIfDarkMode()
         switchToggleThemeAction()
 
-        setUpRecyclerView(binding.rvMovies, LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false), movieAdapterPaging)
-        setUpRecyclerView(binding.rvGenres, LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false), genresAdapterMovie)
+
+        setUpRecyclerView()
 
         setUpViewModel()
     }
@@ -137,10 +138,18 @@ class HomeFragment : Fragment(), AdapterMoviePaging.ListenerMoviesAdapter, Adapt
         }
     }
 
-    private fun setUpRecyclerView(recyclerView: RecyclerView, mLayoutManager: LinearLayoutManager, mAdapter: RecyclerView.Adapter<*>){
-        recyclerView.apply {
-            layoutManager = mLayoutManager
-            adapter = mAdapter
+    private fun setUpRecyclerView(){
+        binding.rvGenres.apply {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = genresAdapterMovie
+        }
+
+        binding.rvMovies.apply {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = movieAdapterPaging.withLoadStateHeaderAndFooter(
+                header = StateLoadAdapterMoviePaging {movieAdapterPaging.retry()},
+                footer = StateLoadAdapterMoviePaging {movieAdapterPaging.retry()}
+            )
         }
     }
 

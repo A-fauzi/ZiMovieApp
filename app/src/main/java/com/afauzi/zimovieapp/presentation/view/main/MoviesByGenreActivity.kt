@@ -11,6 +11,7 @@ import com.afauzi.zimovieapp.data.repository.MovieRepository
 import com.afauzi.zimovieapp.databinding.ActivityMoviesByGenreBinding
 import com.afauzi.zimovieapp.domain.modelentities.movie.Movie
 import com.afauzi.zimovieapp.presentation.adapter.AdapterMoviePaging
+import com.afauzi.zimovieapp.presentation.adapter.stateadapter.StateLoadAdapterMoviePaging
 import com.afauzi.zimovieapp.presentation.viewmodel.movie.MovieViewModel
 import com.afauzi.zimovieapp.presentation.viewmodel.movie.MovieViewModelFactory
 import kotlinx.coroutines.launch
@@ -33,7 +34,10 @@ class MoviesByGenreActivity : AppCompatActivity(), AdapterMoviePaging.ListenerMo
         moviePagingAdapter = AdapterMoviePaging(this, this )
         binding.rvMovies.apply {
             layoutManager = GridLayoutManager(context, 2)
-            adapter = moviePagingAdapter
+            adapter = moviePagingAdapter.withLoadStateHeaderAndFooter(
+                header = StateLoadAdapterMoviePaging {moviePagingAdapter.retry()},
+                footer = StateLoadAdapterMoviePaging {moviePagingAdapter.retry()},
+            )
         }
 
         val bundleExtras = intent.extras

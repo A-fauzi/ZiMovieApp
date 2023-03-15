@@ -59,7 +59,7 @@ class MovieViewModel(private val movieRepository: MovieRepository, private val m
         MoviesByGenrePagingSource(movieApiService, genreId)
     }.flow.cachedIn(viewModelScope)
 
-    fun listMovieReviews(movieId: Int) = Pager(PagingConfig(pageSize = 10)) {
+    fun listMovieReviews(movieId: Int) = Pager(PagingConfig(pageSize = 5)) {
         MovieReviewsPagingSource(movieApiService, movieId)
     }.flow.cachedIn(viewModelScope)
 
