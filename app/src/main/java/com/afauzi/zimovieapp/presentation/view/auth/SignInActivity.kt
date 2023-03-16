@@ -29,6 +29,9 @@ class SignInActivity : AppCompatActivity() {
         etPassword = binding.etPassword
         etEmail.addTextChangedListener(textWatcher(etEmail))
         etPassword.addTextChangedListener(textWatcher(etPassword))
+
+        val authRepository = AuthRepository(FirebaseAuth.getInstance())
+        viewModel = ViewModelProvider(this, AuthViewModelProvider(authRepository))[AuthViewModel::class.java]
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,9 +68,6 @@ class SignInActivity : AppCompatActivity() {
     }
 
     private fun setUpViewModel() {
-        val authRepository = AuthRepository(FirebaseAuth.getInstance())
-        viewModel = ViewModelProvider(this, AuthViewModelProvider(authRepository))[AuthViewModel::class.java]
-
         viewModel.authResult.observe(this) { authResult ->
             when(authResult) {
                 is AuthViewModel.AuthResult.Success -> {

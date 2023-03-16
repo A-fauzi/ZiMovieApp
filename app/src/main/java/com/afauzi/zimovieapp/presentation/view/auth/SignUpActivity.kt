@@ -40,6 +40,10 @@ class SignUpActivity : AppCompatActivity() {
         etUsername.addTextChangedListener(textWatcher(etUsername))
         etPassword.addTextChangedListener(textWatcher(etPassword))
         etConfirmPassword.addTextChangedListener(textWatcher(etConfirmPassword))
+
+        val authRepository = AuthRepository(FirebaseAuth.getInstance())
+        viewModel = ViewModelProvider(this, AuthViewModelProvider(authRepository))[AuthViewModel::class.java]
+
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,9 +77,6 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun setUpViewModel() {
-        val authRepository = AuthRepository(FirebaseAuth.getInstance())
-        viewModel = ViewModelProvider(this, AuthViewModelProvider(authRepository))[AuthViewModel::class.java]
-
         viewModel.authResult.observe(this) { signUpResult ->
             when(signUpResult) {
                 is AuthViewModel.AuthResult.Success -> {
