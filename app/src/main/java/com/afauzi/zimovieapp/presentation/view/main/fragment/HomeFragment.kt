@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -25,6 +26,7 @@ import com.afauzi.zimovieapp.presentation.view.main.DetailMovieActivity
 import com.afauzi.zimovieapp.presentation.view.main.MoviesByGenreActivity
 import com.afauzi.zimovieapp.presentation.viewmodel.movie.MovieViewModel
 import com.afauzi.zimovieapp.presentation.viewmodel.movie.MovieViewModelFactory
+import com.afauzi.zimovieapp.utils.Helper
 import com.google.firebase.auth.FirebaseAuth
 import io.paperdb.Paper
 import kotlinx.coroutines.launch
@@ -55,17 +57,46 @@ class HomeFragment : Fragment(), AdapterMoviePaging.ListenerMoviesAdapter, Adapt
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Cek connection internet
+        when(Helper.checkInternetConnect(requireActivity())) {
+            true -> {
+                viewVisible()
+            }
+            false -> {
+                themeAction()
+                binding.contentContainer.visibility = View.GONE
+                binding.containerLayoutDisconnected.root.visibility = View.VISIBLE
+                binding.containerLayoutDisconnected.btnRefreshConnection.setOnClickListener {
+                    when(Helper.checkInternetConnect(requireActivity())) {
+                        true -> { viewVisible() }
+                        false -> {
+                            Toast.makeText(requireActivity(), "Please check your internet connection", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun viewVisible() {
+        binding.contentContainer.visibility = View.VISIBLE
+        binding.containerLayoutDisconnected.root.visibility = View.GONE
+
         currentUser()
 
+        themeAction()
+
+        setUpRecyclerView()
+
+        setUpViewModel()
+    }
+
+    private fun themeAction() {
         checkThemeState()
 
         checkStateThemeIfDarkMode()
 
         switchToggleThemeAction()
-
-        setUpRecyclerView()
-
-        setUpViewModel()
     }
 
     private fun setUpViewModel() {
