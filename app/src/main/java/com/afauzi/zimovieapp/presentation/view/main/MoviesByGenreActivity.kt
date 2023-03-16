@@ -33,23 +33,29 @@ class MoviesByGenreActivity : AppCompatActivity(), AdapterMoviePaging.ListenerMo
     override fun onStart() {
         super.onStart()
 
-        when(Helper.checkInternetConnect(this)) {
-            true -> {
+        Helper.checkConnection(this, object : Helper.OnCheckFinished{
+            override fun onConnected() {
                 viewVisible()
             }
-            false -> {
+
+            override fun onDisconnected() {
                 binding.contentContainer.visibility = View.GONE
                 binding.disconnetedContainer.root.visibility = View.VISIBLE
                 binding.disconnetedContainer.btnRefreshConnection.setOnClickListener {
-                    when(Helper.checkInternetConnect(this)) {
-                        true -> { viewVisible() }
-                        false -> {
-                            Toast.makeText(this, "Please check your connection internet", Toast.LENGTH_SHORT).show()
+                    Helper.checkConnection(this@MoviesByGenreActivity, object : Helper.OnCheckFinished{
+                        override fun onConnected() {
+                            viewVisible()
                         }
-                    }
+
+                        override fun onDisconnected() {
+                            Toast.makeText(this@MoviesByGenreActivity, "Please check your connection internet", Toast.LENGTH_SHORT).show()
+                        }
+
+                    })
                 }
             }
-        }
+
+        })
     }
 
     private fun viewVisible() {

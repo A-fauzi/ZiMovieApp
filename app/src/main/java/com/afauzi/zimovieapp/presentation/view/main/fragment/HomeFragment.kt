@@ -58,24 +58,30 @@ class HomeFragment : Fragment(), AdapterMoviePaging.ListenerMoviesAdapter, Adapt
         super.onViewCreated(view, savedInstanceState)
 
         // Cek connection internet
-        when(Helper.checkInternetConnect(requireActivity())) {
-            true -> {
+        Helper.checkConnection(requireActivity(), object : Helper.OnCheckFinished{
+            override fun onConnected() {
                 viewVisible()
             }
-            false -> {
+
+            override fun onDisconnected() {
                 themeAction()
                 binding.contentContainer.visibility = View.GONE
                 binding.containerLayoutDisconnected.root.visibility = View.VISIBLE
                 binding.containerLayoutDisconnected.btnRefreshConnection.setOnClickListener {
-                    when(Helper.checkInternetConnect(requireActivity())) {
-                        true -> { viewVisible() }
-                        false -> {
-                            Toast.makeText(requireActivity(), "Please check your internet connection", Toast.LENGTH_SHORT).show()
+                    Helper.checkConnection(requireActivity(), object : Helper.OnCheckFinished {
+                        override fun onConnected() {
+                            viewVisible()
                         }
-                    }
+
+                        override fun onDisconnected() {
+                            Toast.makeText(requireActivity(), "Please your check connection internet", Toast.LENGTH_SHORT).show()
+                        }
+
+                    })
                 }
             }
-        }
+
+        })
     }
 
     private fun viewVisible() {

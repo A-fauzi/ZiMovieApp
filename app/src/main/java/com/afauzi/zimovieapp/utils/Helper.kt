@@ -6,7 +6,7 @@ import android.net.NetworkCapabilities
 import android.os.Build
 
 object Helper {
-    fun checkInternetConnect(context: Context): Boolean {
+    private fun checkInternetConnect(context: Context): Boolean {
         // register activity with the connectivity manager service
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
@@ -41,6 +41,18 @@ object Helper {
             val networkInfo = connectivityManager.activeNetworkInfo ?: return false
             @Suppress("DEPRECATION")
             return networkInfo.isConnected
+        }
+    }
+
+    interface OnCheckFinished {
+        fun onConnected()
+        fun onDisconnected()
+    }
+
+    fun checkConnection(context: Context, onCheckFinished: OnCheckFinished) {
+        when(checkInternetConnect(context)) {
+            true -> {onCheckFinished.onConnected()}
+            false -> {onCheckFinished.onDisconnected()}
         }
     }
 }
