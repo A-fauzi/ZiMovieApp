@@ -1,5 +1,6 @@
 package com.afauzi.zimovieapp.presentation.view.main.fragment
 
+import android.R
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
@@ -11,8 +12,8 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.afauzi.zimovieapp.data.remote.MovieApiProvider
 import com.afauzi.zimovieapp.data.remote.MovieApiService
 import com.afauzi.zimovieapp.data.repository.MovieRepository
@@ -31,7 +32,9 @@ import com.google.firebase.auth.FirebaseAuth
 import io.paperdb.Paper
 import kotlinx.coroutines.launch
 
-class HomeFragment : Fragment(), AdapterMoviePaging.ListenerMoviesAdapter, AdapterGenresMovie.ListenerAdapterGenre {
+
+class HomeFragment : Fragment(), AdapterMoviePaging.ListenerMoviesAdapter,
+    AdapterGenresMovie.ListenerAdapterGenre {
 
     private lateinit var binding: FragmentHomeBinding
     private lateinit var viewModel: MovieViewModel
@@ -46,7 +49,6 @@ class HomeFragment : Fragment(), AdapterMoviePaging.ListenerMoviesAdapter, Adapt
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
         binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
 
         initView()
@@ -57,35 +59,20 @@ class HomeFragment : Fragment(), AdapterMoviePaging.ListenerMoviesAdapter, Adapt
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Cek connection internet
-        Helper.checkConnection(requireActivity(), object : Helper.OnCheckFinished{
+        Helper.checkConnection(requireActivity(), object : Helper.OnCheckFinished {
             override fun onConnected() {
                 viewVisible()
             }
 
             override fun onDisconnected() {
-                themeAction()
-                binding.contentContainer.visibility = View.GONE
-                binding.containerLayoutDisconnected.root.visibility = View.VISIBLE
-                binding.containerLayoutDisconnected.btnRefreshConnection.setOnClickListener {
-                    Helper.checkConnection(requireActivity(), object : Helper.OnCheckFinished {
-                        override fun onConnected() {
-                            viewVisible()
-                        }
-
-                        override fun onDisconnected() {
-                            Toast.makeText(requireActivity(), "Please your check connection internet", Toast.LENGTH_SHORT).show()
-                        }
-
-                    })
-                }
+                viewDisconnected("Please your check connection internet")
             }
 
         })
     }
 
     private fun viewVisible() {
-        binding.contentContainer.visibility = View.VISIBLE
+        binding.containerFullContent.visibility = View.VISIBLE
         binding.containerLayoutDisconnected.root.visibility = View.GONE
 
         currentUser()
@@ -97,6 +84,35 @@ class HomeFragment : Fragment(), AdapterMoviePaging.ListenerMoviesAdapter, Adapt
         setUpViewModel()
     }
 
+    private fun viewDisconnected(msg: String, onClickViewAction: (() -> Unit)? = null) {
+        themeAction()
+        binding.progressBar.visibility = View.GONE
+        binding.containerFullContent.visibility = View.GONE
+        binding.containerLayoutDisconnected.root.visibility = View.VISIBLE
+        binding.containerLayoutDisconnected.tvError.text = msg
+        binding.containerLayoutDisconnected.btnRefreshConnection.setOnClickListener {
+
+            if (onClickViewAction == null) {
+                Helper.checkConnection(requireActivity(), object : Helper.OnCheckFinished {
+                    override fun onConnected() {
+                        viewVisible()
+                    }
+
+                    override fun onDisconnected() {
+                        Toast.makeText(
+                            requireActivity(),
+                            msg,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+
+                })
+            } else {
+                onClickViewAction()
+            }
+        }
+    }
+
     private fun themeAction() {
         checkThemeState()
 
@@ -106,6 +122,9 @@ class HomeFragment : Fragment(), AdapterMoviePaging.ListenerMoviesAdapter, Adapt
     }
 
     private fun setUpViewModel() {
+        binding.progressBar.visibility = View.VISIBLE
+        binding.containerFullContent.visibility = View.GONE
+
         lifecycleScope.launch {
             viewModel.listDataMovie.collect {
                 movieAdapterPaging.submitData(it)
@@ -114,6 +133,27 @@ class HomeFragment : Fragment(), AdapterMoviePaging.ListenerMoviesAdapter, Adapt
 
         viewModel.genres.observe(requireActivity()) {
             genresAdapterMovie.setData(it)
+        }
+        viewModel.genreResult.observe(requireActivity()) {
+            when(it) {
+                is MovieViewModel.GenreResult.Success -> {
+                    binding.progressBar.visibility = View.GONE
+                    binding.containerFullContent.visibility = View.VISIBLE
+                }
+                is MovieViewModel.GenreResult.Failure -> {
+                    binding.progressBar.visibility = View.GONE
+                    binding.containerFullContent.visibility = View.GONE
+                    binding.containerLayoutDisconnected.root.visibility = View.VISIBLE
+                    binding.containerLayoutDisconnected.tvError.text = it.error
+                    binding.containerLayoutDisconnected.btnRefreshConnection.setOnClickListener {
+                        val fragmentId =  findNavController().currentDestination?.id
+                        if (fragmentId != null) {
+                            findNavController().popBackStack(fragmentId, true)
+                            findNavController().navigate(fragmentId)
+                        }
+                    }
+                }
+            }
         }
         viewModel.getGenres()
     }
@@ -179,7 +219,7 @@ class HomeFragment : Fragment(), AdapterMoviePaging.ListenerMoviesAdapter, Adapt
         }
     }
 
-    private fun setUpRecyclerView(){
+    private fun setUpRecyclerView() {
         binding.rvGenres.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = genresAdapterMovie
@@ -188,8 +228,8 @@ class HomeFragment : Fragment(), AdapterMoviePaging.ListenerMoviesAdapter, Adapt
         binding.rvMovies.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = movieAdapterPaging.withLoadStateHeaderAndFooter(
-                header = StateLoadAdapterMoviePaging {movieAdapterPaging.retry()},
-                footer = StateLoadAdapterMoviePaging {movieAdapterPaging.retry()}
+                header = StateLoadAdapterMoviePaging { movieAdapterPaging.retry() },
+                footer = StateLoadAdapterMoviePaging { movieAdapterPaging.retry() }
             )
         }
     }
@@ -205,7 +245,7 @@ class HomeFragment : Fragment(), AdapterMoviePaging.ListenerMoviesAdapter, Adapt
 
         viewModel = ViewModelProvider(this, movieViewModelFactory)[MovieViewModel::class.java]
 
-        movieAdapterPaging = AdapterMoviePaging(requireActivity(), this )
+        movieAdapterPaging = AdapterMoviePaging(requireActivity(), this)
         genresAdapterMovie = AdapterGenresMovie(requireActivity(), arrayListOf(), this)
     }
 

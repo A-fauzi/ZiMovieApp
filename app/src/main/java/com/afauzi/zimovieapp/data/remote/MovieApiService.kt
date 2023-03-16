@@ -4,6 +4,7 @@ import com.afauzi.zimovieapp.domain.modelentities.genre.Genres
 import com.afauzi.zimovieapp.domain.modelentities.movie.MovieResponse
 import com.afauzi.zimovieapp.domain.modelentities.moviereviews.MovieReviewsResponse
 import com.afauzi.zimovieapp.domain.modelentities.video.VideoResponse
+import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -18,10 +19,10 @@ interface MovieApiService {
     ): Response<MovieResponse>
 
     @GET("genre/movie/list")
-    suspend fun getGenreMovies(
+    fun getGenreMovies(
         @Query("api_key") apiKey: String,
         @Query("language") language: String,
-    ): Response<Genres>
+    ): Call<Genres>
 
     @GET("discover/movie")
     suspend fun getMovieByGenre(
