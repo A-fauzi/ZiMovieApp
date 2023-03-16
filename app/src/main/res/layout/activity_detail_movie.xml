@@ -184,6 +184,17 @@
            android:focusable="true" />
    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminateTint="@color/blue_ocean"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="gone"/>
     <include
         android:id="@+id/disconneted_container"
         layout="@layout/activity_disconnected"

@@ -139,6 +139,7 @@ class HomeFragment : Fragment(), AdapterMoviePaging.ListenerMoviesAdapter,
                 is MovieViewModel.GenreResult.Success -> {
                     binding.progressBar.visibility = View.GONE
                     binding.containerFullContent.visibility = View.VISIBLE
+                    binding.containerLayoutDisconnected.root.visibility = View.GONE
                 }
                 is MovieViewModel.GenreResult.Failure -> {
                     binding.progressBar.visibility = View.GONE

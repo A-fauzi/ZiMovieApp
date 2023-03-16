@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.afauzi.zimovieapp.R
 import com.afauzi.zimovieapp.data.remote.MovieApiProvider
@@ -42,7 +43,7 @@ class DetailMovieActivity : AppCompatActivity(), AdapterGenresMovie2.ListenerAda
     override fun onStart() {
         super.onStart()
 
-        Helper.checkConnection(this, object : Helper.OnCheckFinished{
+        Helper.checkConnection(this, object : Helper.OnCheckFinished {
             override fun onConnected() {
                 viewVisible()
             }
@@ -51,16 +52,22 @@ class DetailMovieActivity : AppCompatActivity(), AdapterGenresMovie2.ListenerAda
                 binding.contentContainer.visibility = View.GONE
                 binding.disconnetedContainer.root.visibility = View.VISIBLE
                 binding.disconnetedContainer.btnRefreshConnection.setOnClickListener {
-                    Helper.checkConnection(this@DetailMovieActivity, object : Helper.OnCheckFinished{
-                        override fun onConnected() {
-                            viewVisible()
-                        }
+                    Helper.checkConnection(
+                        this@DetailMovieActivity,
+                        object : Helper.OnCheckFinished {
+                            override fun onConnected() {
+                                viewVisible()
+                            }
 
-                        override fun onDisconnected() {
-                            Toast.makeText(this@DetailMovieActivity, "Please check your connection internet", Toast.LENGTH_SHORT).show()
-                        }
+                            override fun onDisconnected() {
+                                Toast.makeText(
+                                    this@DetailMovieActivity,
+                                    "Please check your connection internet",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
 
-                    })
+                        })
                 }
             }
 
@@ -108,7 +115,9 @@ class DetailMovieActivity : AppCompatActivity(), AdapterGenresMovie2.ListenerAda
         }
     }
 
-    private fun setView(view: () -> Unit) {view()}
+    private fun setView(view: () -> Unit) {
+        view()
+    }
 
     private fun onClickView(movieId: String?, title: String?) {
         binding.cvBtnPlayVideo.setOnClickListener {
@@ -151,6 +160,9 @@ class DetailMovieActivity : AppCompatActivity(), AdapterGenresMovie2.ListenerAda
     }
 
     private fun setUpViewModel(movieId: String?, genresId: ArrayList<Int>?) {
+        binding.progressBar.visibility = View.VISIBLE
+        binding.contentContainer.visibility = View.GONE
+
         lifecycleScope.launch {
             if (movieId != null) {
                 movieViewModel.listMovieReviews(movieId.toInt()).collect {
@@ -163,6 +175,27 @@ class DetailMovieActivity : AppCompatActivity(), AdapterGenresMovie2.ListenerAda
             val genres = genresId?.mapNotNull { getGenresNameById(it, genreList) }
             if (genres != null) {
                 genresAdapterMovie2.setData(genres)
+            }
+        }
+        movieViewModel.genreResult.observe(this) {
+            when (it) {
+                is MovieViewModel.GenreResult.Success -> {
+                    binding.progressBar.visibility = View.GONE
+                    binding.contentContainer.visibility = View.VISIBLE
+                    binding.disconnetedContainer.root.visibility = View.GONE
+                }
+                is MovieViewModel.GenreResult.Failure -> {
+                    binding.progressBar.visibility = View.GONE
+                    binding.contentContainer.visibility = View.GONE
+                    binding.disconnetedContainer.root.visibility = View.VISIBLE
+                    binding.disconnetedContainer.tvError.text = it.error
+                    binding.disconnetedContainer.btnRefreshConnection.setOnClickListener {
+                        finish()
+                        overridePendingTransition( 0, 0)
+                        startActivity(intent)
+                        overridePendingTransition( 0, 0)
+                    }
+                }
             }
         }
         movieViewModel.getGenres()
