@@ -24,31 +24,37 @@ class MoviesByGenreActivity : AppCompatActivity(), AdapterMoviePaging.ListenerMo
         super.onCreate(savedInstanceState)
         binding = ActivityMoviesByGenreBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        init()
+    }
 
-
-        val movieApiService = MovieApiProvider.provideMovieApiService()
-        val movieRepository = MovieRepository(movieApiService)
-        val viewModelFactory = MovieViewModelFactory(movieRepository, movieApiService)
-        movieViewModel = ViewModelProvider(this, viewModelFactory)[MovieViewModel::class.java]
-
-        moviePagingAdapter = AdapterMoviePaging(this, this )
-        binding.rvMovies.apply {
-            layoutManager = GridLayoutManager(context, 2)
-            adapter = moviePagingAdapter.withLoadStateHeaderAndFooter(
-                header = StateLoadAdapterMoviePaging {moviePagingAdapter.retry()},
-                footer = StateLoadAdapterMoviePaging {moviePagingAdapter.retry()},
-            )
-        }
+    override fun onStart() {
+        super.onStart()
 
         val bundleExtras = intent.extras
         val idGenre = bundleExtras?.getString("idGenres")
         val nameGenre = bundleExtras?.getString("nameGenres")
         binding.tvGenreName.text = nameGenre
 
+        setUpRecyclerView()
+        setUpViewModel(idGenre)
+    }
+
+    private fun setUpViewModel(idGenre: String?) {
         lifecycleScope.launch {
             movieViewModel.listDataMovieByGenre(idGenre.toString()).collect {
                 moviePagingAdapter.submitData(it)
             }
+        }
+    }
+
+
+    private fun setUpRecyclerView() {
+        binding.rvMovies.apply {
+            layoutManager = GridLayoutManager(context, 2)
+            adapter = moviePagingAdapter.withLoadStateHeaderAndFooter(
+                header = StateLoadAdapterMoviePaging { moviePagingAdapter.retry() },
+                footer = StateLoadAdapterMoviePaging { moviePagingAdapter.retry() },
+            )
         }
     }
 
@@ -65,5 +71,14 @@ class MoviesByGenreActivity : AppCompatActivity(), AdapterMoviePaging.ListenerMo
         intent.putExtras(bundle)
         intent.putIntegerArrayListExtra("genresId", data?.genreIds as ArrayList<Int?>?)
         startActivity(intent)
+    }
+
+    private fun init() {
+        val movieApiService = MovieApiProvider.provideMovieApiService()
+        val movieRepository = MovieRepository(movieApiService)
+        val viewModelFactory = MovieViewModelFactory(movieRepository, movieApiService)
+        movieViewModel = ViewModelProvider(this, viewModelFactory)[MovieViewModel::class.java]
+
+        moviePagingAdapter = AdapterMoviePaging(this, this )
     }
 }
