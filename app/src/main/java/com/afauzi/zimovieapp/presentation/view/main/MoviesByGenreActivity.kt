@@ -3,6 +3,8 @@ package com.afauzi.zimovieapp.presentation.view.main
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
@@ -14,6 +16,7 @@ import com.afauzi.zimovieapp.presentation.adapter.AdapterMoviePaging
 import com.afauzi.zimovieapp.presentation.adapter.stateadapter.StateLoadAdapterMoviePaging
 import com.afauzi.zimovieapp.presentation.viewmodel.movie.MovieViewModel
 import com.afauzi.zimovieapp.presentation.viewmodel.movie.MovieViewModelFactory
+import com.afauzi.zimovieapp.utils.Helper
 import kotlinx.coroutines.launch
 
 class MoviesByGenreActivity : AppCompatActivity(), AdapterMoviePaging.ListenerMoviesAdapter {
@@ -29,6 +32,29 @@ class MoviesByGenreActivity : AppCompatActivity(), AdapterMoviePaging.ListenerMo
 
     override fun onStart() {
         super.onStart()
+
+        when(Helper.checkInternetConnect(this)) {
+            true -> {
+                viewVisible()
+            }
+            false -> {
+                binding.contentContainer.visibility = View.GONE
+                binding.disconnetedContainer.root.visibility = View.VISIBLE
+                binding.disconnetedContainer.btnRefreshConnection.setOnClickListener {
+                    when(Helper.checkInternetConnect(this)) {
+                        true -> { viewVisible() }
+                        false -> {
+                            Toast.makeText(this, "Please check your connection internet", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun viewVisible() {
+        binding.contentContainer.visibility = View.VISIBLE
+        binding.disconnetedContainer.root.visibility = View.GONE
 
         val bundleExtras = intent.extras
         val idGenre = bundleExtras?.getString("idGenres")
