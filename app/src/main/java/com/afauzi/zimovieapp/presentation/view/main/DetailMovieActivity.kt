@@ -2,6 +2,7 @@ package com.afauzi.zimovieapp.presentation.view.main
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -17,6 +18,7 @@ import com.afauzi.zimovieapp.presentation.adapter.AdapterGenresMovie2
 import com.afauzi.zimovieapp.presentation.adapter.AdapterMovieReviewsPaging
 import com.afauzi.zimovieapp.presentation.viewmodel.movie.MovieViewModel
 import com.afauzi.zimovieapp.presentation.viewmodel.movie.MovieViewModelFactory
+import com.afauzi.zimovieapp.utils.Helper
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.launch
 
@@ -40,6 +42,36 @@ class DetailMovieActivity : AppCompatActivity(), AdapterGenresMovie2.ListenerAda
     override fun onStart() {
         super.onStart()
 
+        Helper.checkConnection(this, object : Helper.OnCheckFinished{
+            override fun onConnected() {
+                viewVisible()
+            }
+
+            override fun onDisconnected() {
+                binding.contentContainer.visibility = View.GONE
+                binding.disconnetedContainer.root.visibility = View.VISIBLE
+                binding.disconnetedContainer.btnRefreshConnection.setOnClickListener {
+                    Helper.checkConnection(this@DetailMovieActivity, object : Helper.OnCheckFinished{
+                        override fun onConnected() {
+                            viewVisible()
+                        }
+
+                        override fun onDisconnected() {
+                            Toast.makeText(this@DetailMovieActivity, "Please check your connection internet", Toast.LENGTH_SHORT).show()
+                        }
+
+                    })
+                }
+            }
+
+        })
+
+    }
+
+    private fun viewVisible() {
+        binding.contentContainer.visibility = View.VISIBLE
+        binding.disconnetedContainer.root.visibility = View.GONE
+
         val bundleExtras = intent.extras
         val movieId = bundleExtras?.getString("movieId")
         val backdrop = bundleExtras?.getString("backDrop")
@@ -51,7 +83,8 @@ class DetailMovieActivity : AppCompatActivity(), AdapterGenresMovie2.ListenerAda
         setView {
             binding.tvItemVoteAverage.text = voteAverage
             binding.collapsingToolbar.title = title
-            Glide.with(this).load(MovieApiProvider.BASE_URL_PATH + backdrop).placeholder(R.drawable.image_placeholder_50).into(binding.ivBackdropCollapse)
+            Glide.with(this).load(MovieApiProvider.BASE_URL_PATH + backdrop)
+                .placeholder(R.drawable.image_placeholder_50).into(binding.ivBackdropCollapse)
             if (overview != null) {
                 if (overview.isNotEmpty()) binding.tvOverView.text = overview
                 if (overview.isEmpty()) binding.tvOverView.text = "Is Not Overview"
@@ -61,7 +94,6 @@ class DetailMovieActivity : AppCompatActivity(), AdapterGenresMovie2.ListenerAda
         onClickView(movieId, title)
         setUpRecyclerView()
         setUpViewModel(movieId, genresId)
-
     }
 
     private fun setUpRecyclerView() {
