@@ -10,7 +10,8 @@
         android:id="@+id/progressbar"
         android:layout_width="32dp"
         android:layout_height="32dp"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:indeterminateTint="@color/blue_ocean"/>
 
     <TextView
         android:id="@+id/text_view_error"
