@@ -20,7 +20,6 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/inter_bold"
             android:text="Create an Account"
-            android:textColor="@color/black"
             android:textSize="@dimen/title_dimen_24" />
 
         <TextView
@@ -164,11 +163,13 @@
                android:id="@+id/btn_next_register"
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
+               android:backgroundTint="@color/blue_ocean"
+               android:textColor="@color/white"
+               android:enabled="false"
                android:padding="@dimen/margin"
                android:text="Next"
                android:textAllCaps="false"
-               app:cornerRadius="@dimen/corner_radius_button"
-               android:enabled="false"/>
+               app:cornerRadius="@dimen/corner_radius_button" />
 
            <ProgressBar
                android:id="@+id/progress_bar"
@@ -176,7 +177,8 @@
                android:layout_height="wrap_content"
                android:layout_centerVertical="true"
                android:layout_centerHorizontal="true"
-               android:visibility="gone"/>
+               android:visibility="gone"
+               android:indeterminateTint="@color/blue_ocean"/>
        </RelativeLayout>
 
         <LinearLayout
@@ -244,7 +246,6 @@
                     android:layout_margin="8dp"
                     android:fontFamily="@font/inter_semibold"
                     android:text="@string/login"
-                    android:textColor="@color/blue_ocean"
                     android:textSize="@dimen/text_size_18" />
             </androidx.cardview.widget.CardView>
         </LinearLayout>

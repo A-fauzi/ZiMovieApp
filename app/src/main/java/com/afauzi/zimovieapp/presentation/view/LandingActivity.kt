@@ -19,13 +19,16 @@ class LandingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLandingBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        auth = FirebaseAuth.getInstance()
+        init()
     }
 
     override fun onStart() {
         super.onStart()
         currentUser()
+        onClickView()
+    }
 
+    private fun onClickView() {
         binding.btnCreateAccount.setOnClickListener {
             startActivity(Intent(this, SignUpActivity::class.java))
         }
@@ -45,5 +48,9 @@ class LandingActivity : AppCompatActivity() {
                 finish()
             }
         }
+    }
+
+    private fun init() {
+        auth = FirebaseAuth.getInstance()
     }
 }

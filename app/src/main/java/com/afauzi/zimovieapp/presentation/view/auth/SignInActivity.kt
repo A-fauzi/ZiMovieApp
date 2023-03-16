@@ -21,7 +21,6 @@ class SignInActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySignInBinding
     private lateinit var viewModel: AuthViewModel
-
     private lateinit var etEmail: EditText
     private lateinit var etPassword: EditText
 
@@ -35,21 +34,26 @@ class SignInActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySignInBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         initView()
         setUpViewModel()
     }
 
     override fun onStart() {
         super.onStart()
+        onCLickView()
+    }
 
+    private fun onCLickView() {
         binding.cvBtnForgotPassword.setOnClickListener {
             Toast.makeText(this, "Sedang dalam pengembangan", Toast.LENGTH_SHORT).show()
         }
         binding.btnSignIn.setOnClickListener {
             binding.btnSignIn.visibility = View.GONE
             binding.progressBar.visibility = View.VISIBLE
-            viewModel.signInWithEmailAndPassword(etEmail.text.toString(), etPassword.text.toString())
+            viewModel.signInWithEmailAndPassword(
+                etEmail.text.toString(),
+                etPassword.text.toString()
+            )
         }
         binding.ivBtnSignInByGoogle.setOnClickListener {
             Toast.makeText(this, "Sedang dalam pengembangan", Toast.LENGTH_SHORT).show()

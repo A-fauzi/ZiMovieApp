@@ -46,17 +46,22 @@ class SignUpActivity : AppCompatActivity() {
         binding = ActivitySignUpBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initView()
-
         setUpViewModel()
     }
 
     override fun onStart() {
         super.onStart()
+        onClickView()
+    }
 
+    private fun onClickView() {
         binding.btnNextRegister.setOnClickListener {
             binding.btnNextRegister.visibility = View.GONE
             binding.progressBar.visibility = View.VISIBLE
-            viewModel.createUserWithEmailPassword(etEmail.text.toString(), etPassword.text.toString())
+            viewModel.createUserWithEmailPassword(
+                etEmail.text.toString(),
+                etPassword.text.toString()
+            )
         }
         binding.ivBtnCreateByGoogle.setOnClickListener {
             Toast.makeText(this, "Sedang dalam pengembangan", Toast.LENGTH_SHORT).show()

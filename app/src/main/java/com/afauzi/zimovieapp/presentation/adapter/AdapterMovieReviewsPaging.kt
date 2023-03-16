@@ -1,16 +1,20 @@
 package com.afauzi.zimovieapp.presentation.adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.afauzi.zimovieapp.R
+import com.afauzi.zimovieapp.data.remote.MovieApiProvider
 import com.afauzi.zimovieapp.databinding.ItemsMovieReviewsBinding
 import com.afauzi.zimovieapp.domain.modelentities.moviereviews.MovieReview
+import com.bumptech.glide.Glide
 import java.text.SimpleDateFormat
 import java.util.*
 
-class AdapterMovieReviewsPaging: PagingDataAdapter<MovieReview, AdapterMovieReviewsPaging.ViewHolder>(MovieReviewDiffComp) {
+class AdapterMovieReviewsPaging(private val context: Context): PagingDataAdapter<MovieReview, AdapterMovieReviewsPaging.ViewHolder>(MovieReviewDiffComp) {
     class ViewHolder(val binding: ItemsMovieReviewsBinding): RecyclerView.ViewHolder(binding.root)
 
     object MovieReviewDiffComp : DiffUtil.ItemCallback<MovieReview>() {
@@ -35,6 +39,8 @@ class AdapterMovieReviewsPaging: PagingDataAdapter<MovieReview, AdapterMovieRevi
                 if (this?.updatedAt != null || this?.updatedAt != "") binding.tvItemUserDatePost.text = updateAtConvert
                 if (this?.updatedAt?.isEmpty() == true)  binding.tvItemUserDatePost.text = createAtConvert
                 binding.tvItemContent.text = this?.content
+                Glide.with(context).load(MovieApiProvider.BASE_URL_PATH + this?.authorDetails?.avatarPath).placeholder(
+                    R.drawable.image_placeholder_50).error(R.drawable.image_example).into(binding.ivItemUserAvatar)
             }
         }
     }

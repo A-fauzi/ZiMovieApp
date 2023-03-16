@@ -78,7 +78,7 @@ class DetailMovieActivity : AppCompatActivity(), AdapterGenresMovie2.ListenerAda
 
         movieViewModel = ViewModelProvider(this, movieViewModelFactory)[MovieViewModel::class.java]
 
-        movieReviewsAdapterPaging = AdapterMovieReviewsPaging()
+        movieReviewsAdapterPaging = AdapterMovieReviewsPaging(this)
         binding.rvMovieReviews.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = movieReviewsAdapterPaging
@@ -118,11 +118,9 @@ class DetailMovieActivity : AppCompatActivity(), AdapterGenresMovie2.ListenerAda
     }
 
     private fun initView() {
-
         movieApiService = MovieApiProvider.provideMovieApiService()
         movieRepository = MovieRepository(movieApiService)
         movieViewModelFactory = MovieViewModelFactory(movieRepository, movieApiService)
-
         movieViewModel = ViewModelProvider(this, movieViewModelFactory)[MovieViewModel::class.java]
     }
 
