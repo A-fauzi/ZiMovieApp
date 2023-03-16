@@ -46,7 +46,9 @@ class HomeFragment : Fragment(), AdapterMoviePaging.ListenerMoviesAdapter, Adapt
     ): View {
         // Inflate the layout for this fragment
         binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
+
         initView()
+
         return binding.root
     }
 
@@ -54,10 +56,12 @@ class HomeFragment : Fragment(), AdapterMoviePaging.ListenerMoviesAdapter, Adapt
         super.onViewCreated(view, savedInstanceState)
 
         currentUser()
-        checkThemeState()
-        checkStateThemeIfDarkMode()
-        switchToggleThemeAction()
 
+        checkThemeState()
+
+        checkStateThemeIfDarkMode()
+
+        switchToggleThemeAction()
 
         setUpRecyclerView()
 
