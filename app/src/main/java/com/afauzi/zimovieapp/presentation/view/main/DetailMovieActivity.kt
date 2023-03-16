@@ -29,11 +29,16 @@ class DetailMovieActivity : AppCompatActivity(), AdapterGenresMovie2.ListenerAda
     private lateinit var movieViewModelFactory: MovieViewModelFactory
     private lateinit var genresAdapterMovie2: AdapterGenresMovie2
     private lateinit var movieReviewsAdapterPaging: AdapterMovieReviewsPaging
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailMovieBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initView()
+    }
+
+    override fun onStart() {
+        super.onStart()
 
         val bundleExtras = intent.extras
         val movieId = bundleExtras?.getString("movieId")
@@ -41,11 +46,42 @@ class DetailMovieActivity : AppCompatActivity(), AdapterGenresMovie2.ListenerAda
         val title = bundleExtras?.getString("title")
         val overview = bundleExtras?.getString("overview")
         val voteAverage = bundleExtras?.getString("voteAverage")
+        val genresId = intent.getIntegerArrayListExtra("genresId")
 
+        setView {
+            binding.tvItemVoteAverage.text = voteAverage
+            binding.collapsingToolbar.title = title
+            Glide.with(this).load(MovieApiProvider.BASE_URL_PATH + backdrop).placeholder(R.drawable.image_placeholder_50).into(binding.ivBackdropCollapse)
+            if (overview != null) {
+                if (overview.isNotEmpty()) binding.tvOverView.text = overview
+                if (overview.isEmpty()) binding.tvOverView.text = "Is Not Overview"
+            }
+        }
 
+        onClickView(movieId, title)
+        setUpRecyclerView()
+        setUpViewModel(movieId, genresId)
+
+    }
+
+    private fun setUpRecyclerView() {
+        binding.rvGenres.apply {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = genresAdapterMovie2
+        }
+
+        binding.rvMovieReviews.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = movieReviewsAdapterPaging
+        }
+    }
+
+    private fun setView(view: () -> Unit) {view()}
+
+    private fun onClickView(movieId: String?, title: String?) {
         binding.cvBtnPlayVideo.setOnClickListener {
             if (movieId != null) {
-                setUpViewModel(movieId.toInt()){ key ->
+                setUpViewModel(movieId.toInt()) { key ->
                     val intent = Intent(this, VideoPlayerActivity::class.java)
                     intent.putExtra("movieKey", key)
                     startActivity(intent)
@@ -53,54 +89,10 @@ class DetailMovieActivity : AppCompatActivity(), AdapterGenresMovie2.ListenerAda
             }
         }
 
-        binding.tvItemVoteAverage.text = voteAverage
-        binding.collapsingToolbar.title = title
-        Glide.with(this).load(MovieApiProvider.BASE_URL_PATH + backdrop).placeholder(R.drawable.image_placeholder_50).into(binding.ivBackdropCollapse)
-        if (overview != null) {
-            if (overview.isNotEmpty()) binding.tvOverView.text = overview
-            if (overview.isEmpty()) binding.tvOverView.text = "Is Not Overview"
-        }
         binding.fabFavCollapsing.setOnClickListener {
             Toast.makeText(this, "your like $title", Toast.LENGTH_SHORT).show()
             binding.fabFavCollapsing.setImageResource(R.drawable.ic_star)
         }
-
-        genresAdapterMovie2 = AdapterGenresMovie2(arrayListOf(), this)
-
-        binding.rvGenres.apply {
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = genresAdapterMovie2
-        }
-
-        movieApiService = MovieApiProvider.provideMovieApiService()
-        movieRepository = MovieRepository(movieApiService)
-        movieViewModelFactory = MovieViewModelFactory(movieRepository, movieApiService)
-
-        movieViewModel = ViewModelProvider(this, movieViewModelFactory)[MovieViewModel::class.java]
-
-        movieReviewsAdapterPaging = AdapterMovieReviewsPaging(this)
-        binding.rvMovieReviews.apply {
-            layoutManager = LinearLayoutManager(context)
-            adapter = movieReviewsAdapterPaging
-        }
-
-        val genresId = intent.getIntegerArrayListExtra("genresId")
-        movieViewModel.genres.observe(this) { genreList ->
-            val genres = genresId?.mapNotNull { getGenresNameById(it, genreList) }
-            if (genres != null) {
-                genresAdapterMovie2.setData(genres)
-            }
-        }
-        movieViewModel.getGenres()
-
-        lifecycleScope.launch {
-            if (movieId != null) {
-                movieViewModel.listMovieReviews(movieId.toInt()).collect {
-                    movieReviewsAdapterPaging.submitData(it)
-                }
-            }
-        }
-
     }
 
     private fun getGenresNameById(id: Int, genre: List<Genre>): Genre? {
@@ -122,6 +114,26 @@ class DetailMovieActivity : AppCompatActivity(), AdapterGenresMovie2.ListenerAda
         movieRepository = MovieRepository(movieApiService)
         movieViewModelFactory = MovieViewModelFactory(movieRepository, movieApiService)
         movieViewModel = ViewModelProvider(this, movieViewModelFactory)[MovieViewModel::class.java]
+        genresAdapterMovie2 = AdapterGenresMovie2(arrayListOf(), this)
+        movieReviewsAdapterPaging = AdapterMovieReviewsPaging(this)
+    }
+
+    private fun setUpViewModel(movieId: String?, genresId: ArrayList<Int>?) {
+        lifecycleScope.launch {
+            if (movieId != null) {
+                movieViewModel.listMovieReviews(movieId.toInt()).collect {
+                    movieReviewsAdapterPaging.submitData(it)
+                }
+            }
+        }
+
+        movieViewModel.genres.observe(this) { genreList ->
+            val genres = genresId?.mapNotNull { getGenresNameById(it, genreList) }
+            if (genres != null) {
+                genresAdapterMovie2.setData(genres)
+            }
+        }
+        movieViewModel.getGenres()
     }
 
     private fun setUpViewModel(movieId: Int, getResult: (key: String) -> Unit) {
