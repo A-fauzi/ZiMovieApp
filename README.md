@@ -8,7 +8,6 @@ Proyek ini adalah sebuah aplikasi yang menggunakan sampel api moviedb, arsitektu
 ![Register](/images/register.jpg)
 ![Login](/images/login.jpg)
 ![Home](/images/home.jpg)
-![Landing](/images/landing.jpg)
 ![Movie by Genre](/images/movie_by_genre.jpg)
 ![Detail](/images/detail.jpg)
 ![Reviews](/images/reviews.jpg)
