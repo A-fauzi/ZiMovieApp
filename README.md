@@ -13,4 +13,4 @@ Proyek ini adalah sebuah aplikasi yang menggunakan sampel api moviedb, arsitektu
 ![Reviews](/images/reviews.jpg)
 <br>
 <br>
-[APK File](https://pages.github.com/).
+[APK File](https://drive.google.com/file/d/1faXNcNoRIxq4R3vvh_AGHuAtcVrXr1O8/view?usp=share_link)
