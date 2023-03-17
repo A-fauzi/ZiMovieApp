@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadStateAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.afauzi.zimovieapp.R
 import com.afauzi.zimovieapp.data.remote.MovieApiProvider
@@ -17,6 +18,7 @@ import com.afauzi.zimovieapp.databinding.ActivityDetailMovieBinding
 import com.afauzi.zimovieapp.domain.modelentities.genre.Genre
 import com.afauzi.zimovieapp.presentation.adapter.AdapterGenresMovie2
 import com.afauzi.zimovieapp.presentation.adapter.AdapterMovieReviewsPaging
+import com.afauzi.zimovieapp.presentation.adapter.stateadapter.StateLoadAdapterMoviePaging
 import com.afauzi.zimovieapp.presentation.viewmodel.movie.MovieViewModel
 import com.afauzi.zimovieapp.presentation.viewmodel.movie.MovieViewModelFactory
 import com.afauzi.zimovieapp.utils.Helper
@@ -111,7 +113,23 @@ class DetailMovieActivity : AppCompatActivity(), AdapterGenresMovie2.ListenerAda
 
         binding.rvMovieReviews.apply {
             layoutManager = LinearLayoutManager(context)
-            adapter = movieReviewsAdapterPaging
+            adapter = movieReviewsAdapterPaging.withLoadStateHeaderAndFooter(
+                header = StateLoadAdapterMoviePaging {movieReviewsAdapterPaging.retry()},
+                footer = StateLoadAdapterMoviePaging {movieReviewsAdapterPaging.retry()}
+            )
+
+            // Untuk mengecek data count pada paging first
+            movieReviewsAdapterPaging.addLoadStateListener { loadState ->
+                if (loadState.append.endOfPaginationReached) {
+                    if (movieReviewsAdapterPaging.itemCount < 1) {
+                        // data empty state
+                        binding.tvDataReviewsIsEmpty.visibility = View.VISIBLE
+                    } else {
+                        // data is not empty
+                        binding.tvDataReviewsIsEmpty.visibility = View.GONE
+                    }
+                }
+            }
         }
     }
 

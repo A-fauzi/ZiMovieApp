@@ -157,12 +157,25 @@
                                android:text="Reviews:"
                                android:fontFamily="@font/inter_bold"
                                android:layout_marginTop="@dimen/margin"/>
-                           <androidx.recyclerview.widget.RecyclerView
-                               android:id="@+id/rv_movie_reviews"
+                           <RelativeLayout
                                android:layout_width="match_parent"
-                               android:layout_height="wrap_content"
-                               tools:listitem="@layout/items_movie_reviews"
-                               android:layout_marginTop="@dimen/margin"/>
+                               android:layout_height="match_parent">
+
+                               <androidx.recyclerview.widget.RecyclerView
+                                   android:id="@+id/rv_movie_reviews"
+                                   android:layout_width="match_parent"
+                                   android:layout_height="wrap_content"
+                                   tools:listitem="@layout/items_movie_reviews"
+                                   android:layout_marginTop="@dimen/margin"/>
+
+                               <TextView
+                                   android:id="@+id/tv_data_reviews_is_empty"
+                                   android:layout_width="wrap_content"
+                                   android:layout_height="wrap_content"
+                                   android:text="Reviews is empty"
+                                   android:layout_centerHorizontal="true"
+                                   android:visibility="gone"/>
+                           </RelativeLayout>
                        </LinearLayout>
                    </LinearLayout>
                </LinearLayout>
