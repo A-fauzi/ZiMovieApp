@@ -7,39 +7,50 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
-import androidx.paging.LoadStateAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.afauzi.zimovieapp.R
+import com.afauzi.zimovieapp.data.local.AppDatabase
 import com.afauzi.zimovieapp.data.remote.MovieApiProvider
 import com.afauzi.zimovieapp.data.remote.MovieApiService
+import com.afauzi.zimovieapp.data.repository.MovieBookmarkRepository
 import com.afauzi.zimovieapp.data.repository.MovieRepository
 import com.afauzi.zimovieapp.databinding.ActivityDetailMovieBinding
 import com.afauzi.zimovieapp.domain.modelentities.genre.Genre
+import com.afauzi.zimovieapp.domain.modelentities.movie.MovieBookmark
 import com.afauzi.zimovieapp.presentation.adapter.AdapterGenresMovie2
 import com.afauzi.zimovieapp.presentation.adapter.AdapterMovieReviewsPaging
 import com.afauzi.zimovieapp.presentation.adapter.stateadapter.StateLoadAdapterMoviePaging
+import com.afauzi.zimovieapp.presentation.viewmodel.movie.MovieBookmarkViewModel
+import com.afauzi.zimovieapp.presentation.viewmodel.movie.MovieBookmarkViewModelFactory
 import com.afauzi.zimovieapp.presentation.viewmodel.movie.MovieViewModel
 import com.afauzi.zimovieapp.presentation.viewmodel.movie.MovieViewModelFactory
 import com.afauzi.zimovieapp.utils.Helper
 import com.bumptech.glide.Glide
+import io.paperdb.Paper
 import kotlinx.coroutines.launch
 
 class DetailMovieActivity : AppCompatActivity(), AdapterGenresMovie2.ListenerAdapterGenre {
     private lateinit var binding: ActivityDetailMovieBinding
 
     private lateinit var movieViewModel: MovieViewModel
+    private lateinit var movieBokmarkViewModel: MovieBookmarkViewModel
     private lateinit var movieApiService: MovieApiService
     private lateinit var movieRepository: MovieRepository
     private lateinit var movieViewModelFactory: MovieViewModelFactory
     private lateinit var genresAdapterMovie2: AdapterGenresMovie2
     private lateinit var movieReviewsAdapterPaging: AdapterMovieReviewsPaging
+    private var favState = false
+
+    companion object {
+
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailMovieBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initView()
+        Paper.init(this)
     }
 
     override fun onStart() {
@@ -89,6 +100,22 @@ class DetailMovieActivity : AppCompatActivity(), AdapterGenresMovie2.ListenerAda
         val voteAverage = bundleExtras?.getString("voteAverage")
         val genresId = intent.getIntegerArrayListExtra("genresId")
 
+        movieBokmarkViewModel.getCachedMovieToBookmark().observe(this) { list ->
+            list.map {
+                if (it.id.toString() == movieId) {
+                    favState = true
+                }
+            }
+            when (favState) {
+                true -> {
+                    binding.fabFavCollapsing.setImageResource(R.drawable.ic_star)
+                }
+                false -> {
+                    binding.fabFavCollapsing.setImageResource(R.drawable.ic_star_outline)
+                }
+            }
+        }
+
         setView {
             binding.tvItemVoteAverage.text = voteAverage
             binding.collapsingToolbar.title = title
@@ -100,7 +127,7 @@ class DetailMovieActivity : AppCompatActivity(), AdapterGenresMovie2.ListenerAda
             }
         }
 
-        onClickView(movieId, title)
+        onClickView(movieId)
         setUpRecyclerView()
         setUpViewModel(movieId, genresId)
     }
@@ -114,8 +141,8 @@ class DetailMovieActivity : AppCompatActivity(), AdapterGenresMovie2.ListenerAda
         binding.rvMovieReviews.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = movieReviewsAdapterPaging.withLoadStateHeaderAndFooter(
-                header = StateLoadAdapterMoviePaging {movieReviewsAdapterPaging.retry()},
-                footer = StateLoadAdapterMoviePaging {movieReviewsAdapterPaging.retry()}
+                header = StateLoadAdapterMoviePaging { movieReviewsAdapterPaging.retry() },
+                footer = StateLoadAdapterMoviePaging { movieReviewsAdapterPaging.retry() }
             )
 
             // Untuk mengecek data count pada paging first
@@ -137,7 +164,7 @@ class DetailMovieActivity : AppCompatActivity(), AdapterGenresMovie2.ListenerAda
         view()
     }
 
-    private fun onClickView(movieId: String?, title: String?) {
+    private fun onClickView(movieId: String?) {
         binding.cvBtnPlayVideo.setOnClickListener {
             if (movieId != null) {
                 setUpViewModel(movieId.toInt()) { key ->
@@ -149,8 +176,56 @@ class DetailMovieActivity : AppCompatActivity(), AdapterGenresMovie2.ListenerAda
         }
 
         binding.fabFavCollapsing.setOnClickListener {
-            Toast.makeText(this, "your like $title", Toast.LENGTH_SHORT).show()
-            binding.fabFavCollapsing.setImageResource(R.drawable.ic_star)
+            favState = !favState
+
+            if (movieId != null) {
+                movieViewModel.movieDetail.observe(this) {
+                    // save movie to cached
+                    it.let {
+                        val movieBookmarkDao =
+                            AppDatabase.getInstance(applicationContext).movieBookmarkDao()
+                        val data = MovieBookmark(
+                            it.id,
+                            it.backdropPath,
+                            it.title,
+                            it.originalLanguage,
+                            it.overview,
+                            it.voteAverage.toString(),
+                            it.revenue,
+                            it.popularity,
+                            it.voteCount,
+                            it.posterPath,
+                            it.releaseDate
+                        )
+                        when (favState) {
+                            true -> {
+                                binding.fabFavCollapsing.setImageResource(R.drawable.ic_star)
+                                Toast.makeText(
+                                    this,
+                                    "Movie ditambahkan ke bookmark",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                lifecycleScope.launch {
+                                    movieBookmarkDao.insertMovieToBookmark(data)
+                                }
+                            }
+                            false -> {
+                                binding.fabFavCollapsing.setImageResource(R.drawable.ic_star_outline)
+                                Toast.makeText(
+                                    this,
+                                    "Movie batal ditambahkan ke bookmark",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                lifecycleScope.launch {
+                                    movieBookmarkDao.deleteSingleMovieBookmark(data)
+                                }
+                            }
+                        }
+                    }
+                }
+                movieViewModel.getMovieDetail(movieId.toInt())
+            }
+
         }
     }
 
@@ -175,6 +250,12 @@ class DetailMovieActivity : AppCompatActivity(), AdapterGenresMovie2.ListenerAda
         movieViewModel = ViewModelProvider(this, movieViewModelFactory)[MovieViewModel::class.java]
         genresAdapterMovie2 = AdapterGenresMovie2(arrayListOf(), this)
         movieReviewsAdapterPaging = AdapterMovieReviewsPaging(this)
+
+        val movieBookmarkDao = AppDatabase.getInstance(this).movieBookmarkDao()
+        val repository = MovieBookmarkRepository(movieBookmarkDao)
+        val viewModelFactory = MovieBookmarkViewModelFactory(repository)
+        movieBokmarkViewModel =
+            ViewModelProvider(this, viewModelFactory)[MovieBookmarkViewModel::class.java]
     }
 
     private fun setUpViewModel(movieId: String?, genresId: ArrayList<Int>?) {
@@ -209,9 +290,9 @@ class DetailMovieActivity : AppCompatActivity(), AdapterGenresMovie2.ListenerAda
                     binding.disconnetedContainer.tvError.text = it.error
                     binding.disconnetedContainer.btnRefreshConnection.setOnClickListener {
                         finish()
-                        overridePendingTransition( 0, 0)
+                        overridePendingTransition(0, 0)
                         startActivity(intent)
-                        overridePendingTransition( 0, 0)
+                        overridePendingTransition(0, 0)
                     }
                 }
             }

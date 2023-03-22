@@ -14,6 +14,7 @@ import com.afauzi.zimovieapp.data.datasource.MoviesPagingSource
 import com.afauzi.zimovieapp.data.remote.MovieApiService
 import com.afauzi.zimovieapp.data.repository.MovieRepository
 import com.afauzi.zimovieapp.domain.modelentities.genre.Genre
+import com.afauzi.zimovieapp.domain.modelentities.movie.MovieDetail
 import com.afauzi.zimovieapp.domain.modelentities.video.VideoResultsItem
 import com.afauzi.zimovieapp.presentation.viewmodel.auth.AuthViewModel
 import kotlinx.coroutines.launch
@@ -60,6 +61,19 @@ class MovieViewModel(
                 _movieVideos.value = movieRepository.getMovieVideos(movieId)
             } catch (e: Exception) {
                 Log.e(TAG, "Error retrieving movie videos", e)
+            }
+        }
+    }
+
+    private val _movieDetail = MutableLiveData<MovieDetail>()
+    val movieDetail: LiveData<MovieDetail>
+        get() = _movieDetail
+    fun getMovieDetail(movieId: Int) {
+        viewModelScope.launch {
+            try {
+                _movieDetail.value = movieRepository.getMovieDetail(movieId)
+            }catch (e: Exception) {
+                Log.e(TAG, "Error retrieving movie detail", e)
             }
         }
     }

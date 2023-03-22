@@ -5,6 +5,7 @@ import com.afauzi.zimovieapp.data.remote.MovieApiProvider
 import com.afauzi.zimovieapp.data.remote.MovieApiService
 import com.afauzi.zimovieapp.domain.modelentities.genre.Genre
 import com.afauzi.zimovieapp.domain.modelentities.genre.Genres
+import com.afauzi.zimovieapp.domain.modelentities.movie.MovieDetail
 import com.afauzi.zimovieapp.domain.modelentities.video.VideoResultsItem
 import retrofit2.Call
 import retrofit2.Callback
@@ -51,4 +52,19 @@ class MovieRepository(private val movieApiService: MovieApiService) {
             throw Exception("Error retrieving movie videos")
         }
     }
+
+    suspend fun getMovieDetail(movieId: Int): MovieDetail? {
+        val response = movieApiService.getMovieDetail(
+            movieId = movieId,
+            apiKey = MovieApiProvider.MOVIE_API_KEY,
+            language = "en-US"
+        )
+        if (response.isSuccessful) {
+            return response.body()
+        } else {
+            throw Exception("Error retrieving movie videos")
+        }
+    }
+
+
 }
