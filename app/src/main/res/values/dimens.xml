@@ -5,6 +5,8 @@
     <dimen name="margin">16dp</dimen>
     <dimen name="corner_radius_button">15dp</dimen>
     <dimen name="text_size_18">18sp</dimen>
+    <dimen name="text_size_24">24sp</dimen>
+    <dimen name="text_size_32">32sp</dimen>
     <dimen name="title_dimen_24">24sp</dimen>
     <dimen name="padding_8">8dp</dimen>
     <dimen name="margin_8">8dp</dimen>
