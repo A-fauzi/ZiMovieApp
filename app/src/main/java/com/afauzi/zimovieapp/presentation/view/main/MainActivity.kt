@@ -10,6 +10,7 @@ import com.afauzi.zimovieapp.R
 import com.afauzi.zimovieapp.databinding.ActivityMainBinding
 import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.afauzi.zimovieapp.utils.Helper
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding

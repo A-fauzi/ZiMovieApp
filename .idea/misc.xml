@@ -3,12 +3,15 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/akhma/DEVELOPMENT/ANDROID/ASSESMENT/ZiMovieApp/app/src/main/res/drawable-v24/selector_botnav_account.xml" value="0.12" />
+        <entry key="..\:/Users/akhma/DEVELOPMENT/ANDROID/ASSESMENT/ZiMovieApp/app/src/main/res/drawable-v24/selector_botnav_bookmark.xml" value="0.12" />
         <entry key="..\:/Users/akhma/DEVELOPMENT/ANDROID/ASSESMENT/ZiMovieApp/app/src/main/res/drawable/ic_badge_check.xml" value="0.149" />
         <entry key="..\:/Users/akhma/DEVELOPMENT/ANDROID/ASSESMENT/ZiMovieApp/app/src/main/res/drawable/ic_disconnected.xml" value="0.12" />
         <entry key="..\:/Users/akhma/DEVELOPMENT/ANDROID/ASSESMENT/ZiMovieApp/app/src/main/res/drawable/ic_icons8_google.xml" value="0.149" />
         <entry key="..\:/Users/akhma/DEVELOPMENT/ANDROID/ASSESMENT/ZiMovieApp/app/src/main/res/drawable/ic_play.xml" value="0.179" />
         <entry key="..\:/Users/akhma/DEVELOPMENT/ANDROID/ASSESMENT/ZiMovieApp/app/src/main/res/drawable/ic_star.xml" value="0.179" />
         <entry key="..\:/Users/akhma/DEVELOPMENT/ANDROID/ASSESMENT/ZiMovieApp/app/src/main/res/drawable/ic_star_outline.xml" value="0.1195" />
+        <entry key="..\:/Users/akhma/DEVELOPMENT/ANDROID/ASSESMENT/ZiMovieApp/app/src/main/res/drawable/selector_botnav_home.xml" value="0.12" />
         <entry key="..\:/Users/akhma/DEVELOPMENT/ANDROID/ASSESMENT/ZiMovieApp/app/src/main/res/layout/activity_authentication.xml" value="0.21041666666666667" />
         <entry key="..\:/Users/akhma/DEVELOPMENT/ANDROID/ASSESMENT/ZiMovieApp/app/src/main/res/layout/activity_detail_movie.xml" value="0.22" />
         <entry key="..\:/Users/akhma/DEVELOPMENT/ANDROID/ASSESMENT/ZiMovieApp/app/src/main/res/layout/activity_disconnected.xml" value="0.18426678067550234" />
@@ -26,6 +29,7 @@
         <entry key="..\:/Users/akhma/DEVELOPMENT/ANDROID/ASSESMENT/ZiMovieApp/app/src/main/res/layout/item_genres.xml" value="0.18426678067550234" />
         <entry key="..\:/Users/akhma/DEVELOPMENT/ANDROID/ASSESMENT/ZiMovieApp/app/src/main/res/layout/item_load_state.xml" value="0.1834117144078666" />
         <entry key="..\:/Users/akhma/DEVELOPMENT/ANDROID/ASSESMENT/ZiMovieApp/app/src/main/res/layout/item_movie.xml" value="0.22447916666666667" />
+        <entry key="..\:/Users/akhma/DEVELOPMENT/ANDROID/ASSESMENT/ZiMovieApp/app/src/main/res/layout/item_movie_bookmark.xml" value="0.25" />
         <entry key="..\:/Users/akhma/DEVELOPMENT/ANDROID/ASSESMENT/ZiMovieApp/app/src/main/res/layout/item_movies.xml" value="0.18426678067550234" />
         <entry key="..\:/Users/akhma/DEVELOPMENT/ANDROID/ASSESMENT/ZiMovieApp/app/src/main/res/layout/item_popular_movies.xml" value="0.221025641025641" />
         <entry key="..\:/Users/akhma/DEVELOPMENT/ANDROID/ASSESMENT/ZiMovieApp/app/src/main/res/layout/item_top_bar.xml" value="0.2234375" />

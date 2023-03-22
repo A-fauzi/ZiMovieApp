@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="150dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_margin="@dimen/margin_8"
+    app:cardCornerRadius="@dimen/corner_radius_button"
+    android:id="@+id/cv_item"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/iv_item_poster"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/image_example"
+            android:adjustViewBounds="true"/>
+
+        <TextView
+            android:id="@+id/tv_item_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_8"
+            android:layout_toStartOf="@id/container_vote"
+            android:layout_toEndOf="@id/iv_item_poster"
+            android:fontFamily="@font/inter_semibold"
+            android:layout_marginEnd="@dimen/margin_8"
+            tools:text="Black Panther" />
+
+        <LinearLayout
+            android:id="@+id/container_vote"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="@dimen/margin_8"
+            android:layout_marginTop="@dimen/margin_8">
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/ic_star"
+                android:layout_marginEnd="@dimen/margin_4"/>
+            <TextView
+                android:id="@+id/tv_item_vote_average"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="rate"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_item_release_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_8"
+            android:layout_toEndOf="@id/iv_item_poster"
+            android:layout_below="@id/tv_item_title"
+            tools:text="2023-02-01" />
+
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="@dimen/margin_8"
+            android:layout_marginBottom="@dimen/margin_8"
+            android:src="@drawable/ic_bookmark_fill"
+            app:tint="@color/blue_ocean" />
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

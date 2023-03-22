@@ -4,9 +4,46 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="@dimen/padding_8"
     tools:context=".presentation.view.main.fragment.BookmarkFragment">
 
 
-    <include layout="@layout/layout_mode_development"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:id="@+id/container_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Bookmark"
+                android:fontFamily="@font/inter_bold"
+                android:textSize="@dimen/text_size_18"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_bookmark_movie"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_8"
+                tools:listitem="@layout/item_movie_bookmark"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_no_items"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:text="Kamu Belum menyimpan apapun"
+            android:fontFamily="@font/inter_semibold"
+            android:visibility="gone"/>
+    </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

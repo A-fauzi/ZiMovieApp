@@ -1,6 +1,7 @@
 package com.afauzi.zimovieapp.data.remote
 
 import com.afauzi.zimovieapp.domain.modelentities.genre.Genres
+import com.afauzi.zimovieapp.domain.modelentities.movie.MovieDetail
 import com.afauzi.zimovieapp.domain.modelentities.movie.MovieResponse
 import com.afauzi.zimovieapp.domain.modelentities.moviereviews.MovieReviewsResponse
 import com.afauzi.zimovieapp.domain.modelentities.video.VideoResponse
@@ -49,4 +50,11 @@ interface MovieApiService {
         @Query("language") language: String,
         @Query("page") page: Int
     ): Response<MovieReviewsResponse>
+
+    @GET("movie/{id}")
+    suspend fun getMovieDetail(
+        @Path("id") movieId: Int,
+        @Query("api_key") apiKey: String,
+        @Query("language") language: String,
+    ): Response<MovieDetail>
 }

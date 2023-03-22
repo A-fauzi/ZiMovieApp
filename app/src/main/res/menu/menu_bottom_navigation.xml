@@ -4,17 +4,17 @@
         android:id="@+id/homeFragment"
         android:enabled="true"
         android:title="Home"
-        android:icon="@drawable/ic_home"/>
+        android:icon="@drawable/selector_botnav_home"/>
 
     <item
         android:id="@+id/bookmarkFragment"
         android:enabled="true"
         android:title="Bookmark"
-        android:icon="@drawable/ic_book_bookmark"/>
+        android:icon="@drawable/selector_botnav_bookmark"/>
 
     <item
         android:id="@+id/accountFragment"
         android:enabled="true"
         android:title="Account"
-        android:icon="@drawable/ic_user"/>
+        android:icon="@drawable/selector_botnav_account"/>
 </menu>
